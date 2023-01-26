@@ -68,7 +68,7 @@ class Login extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: ((BuildContext context) => const Signup_name()),
-                    fullscreenDialog: false,
+                    fullscreenDialog: true,
                   ),
                 );
               },

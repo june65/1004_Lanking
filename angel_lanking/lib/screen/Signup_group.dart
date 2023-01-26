@@ -1,16 +1,16 @@
-import 'package:angel_lanking/screen/Login.dart';
-import 'package:angel_lanking/screen/Signup_group.dart';
+import 'package:angel_lanking/screen/Signup_instagram.dart';
+import 'package:angel_lanking/screen/Signup_name.dart';
 import 'package:angel_lanking/widget/Button.dart';
 import 'package:flutter/material.dart';
 
-class Signup_name extends StatefulWidget {
-  const Signup_name({super.key});
+class Signup_group extends StatefulWidget {
+  const Signup_group({super.key});
 
   @override
-  State<Signup_name> createState() => _Signup_nameState();
+  State<Signup_group> createState() => _Signup_groupState();
 }
 
-class _Signup_nameState extends State<Signup_name> {
+class _Signup_groupState extends State<Signup_group> {
   //TextEditingController tec = TextEditingController();
 
   @override
@@ -46,7 +46,7 @@ class _Signup_nameState extends State<Signup_name> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((BuildContext context) =>
-                                        const Login()),
+                                        const Signup_name()),
                                     fullscreenDialog: true,
                                   ),
                                 );
@@ -78,16 +78,16 @@ class _Signup_nameState extends State<Signup_name> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: const [
+                                Icon(
+                                  Icons.beenhere_rounded,
+                                  color: Color(0xFFFEFEFE),
+                                ),
                                 Hero(
                                   tag: 'location_icon',
                                   child: Icon(
                                     Icons.edit_location_alt_rounded,
                                     color: Color(0xFF787878),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.beenhere_rounded,
-                                  color: Color(0xFFFEFEFE),
                                 ),
                                 Icon(
                                   Icons.beenhere_rounded,
@@ -101,12 +101,12 @@ class _Signup_nameState extends State<Signup_name> {
                                 Icon(
                                   Icons.circle,
                                   size: 15,
-                                  color: Color(0xFF787878),
+                                  color: Color(0xFFD9D9D9),
                                 ),
                                 Icon(
                                   Icons.circle,
                                   size: 15,
-                                  color: Color(0xFFD9D9D9),
+                                  color: Color(0xFF787878),
                                 ),
                                 Icon(
                                   Icons.circle,
@@ -118,18 +118,30 @@ class _Signup_nameState extends State<Signup_name> {
                           ],
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 20,
                         ),
-                        child: Text(
-                          '앞으로 사용할 아이디를 설정해주세요',
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
+                        child: Column(
+                          children: const [
+                            Text(
+                              '소속한 단체를 선택해주세요',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '(6개월 간 변경불가)',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -146,7 +158,7 @@ class _Signup_nameState extends State<Signup_name> {
                         TextField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: '영문 + 숫자 10자 이하',
+                            labelText: '단체명 (학교/회사)',
                           ),
                         )
                       ],
@@ -166,7 +178,7 @@ class _Signup_nameState extends State<Signup_name> {
                             context,
                             MaterialPageRoute(
                               builder: ((BuildContext context) =>
-                                  const Signup_group()),
+                                  const Signup_instagram()),
                               fullscreenDialog: true,
                             ),
                           );

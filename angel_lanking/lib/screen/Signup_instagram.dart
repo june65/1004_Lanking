@@ -1,16 +1,16 @@
-import 'package:angel_lanking/screen/Login.dart';
+import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Signup_group.dart';
 import 'package:angel_lanking/widget/Button.dart';
 import 'package:flutter/material.dart';
 
-class Signup_name extends StatefulWidget {
-  const Signup_name({super.key});
+class Signup_instagram extends StatefulWidget {
+  const Signup_instagram({super.key});
 
   @override
-  State<Signup_name> createState() => _Signup_nameState();
+  State<Signup_instagram> createState() => _Signup_instagramState();
 }
 
-class _Signup_nameState extends State<Signup_name> {
+class _Signup_instagramState extends State<Signup_instagram> {
   //TextEditingController tec = TextEditingController();
 
   @override
@@ -46,7 +46,7 @@ class _Signup_nameState extends State<Signup_name> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((BuildContext context) =>
-                                        const Login()),
+                                        const Signup_group()),
                                     fullscreenDialog: true,
                                   ),
                                 );
@@ -78,20 +78,20 @@ class _Signup_nameState extends State<Signup_name> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: const [
+                                Icon(
+                                  Icons.beenhere_rounded,
+                                  color: Color(0xFFFEFEFE),
+                                ),
+                                Icon(
+                                  Icons.beenhere_rounded,
+                                  color: Color(0xFFFEFEFE),
+                                ),
                                 Hero(
                                   tag: 'location_icon',
                                   child: Icon(
                                     Icons.edit_location_alt_rounded,
                                     color: Color(0xFF787878),
                                   ),
-                                ),
-                                Icon(
-                                  Icons.beenhere_rounded,
-                                  color: Color(0xFFFEFEFE),
-                                ),
-                                Icon(
-                                  Icons.beenhere_rounded,
-                                  color: Color(0xFFFEFEFE),
                                 ),
                               ],
                             ),
@@ -101,35 +101,47 @@ class _Signup_nameState extends State<Signup_name> {
                                 Icon(
                                   Icons.circle,
                                   size: 15,
+                                  color: Color(0xFFD9D9D9),
+                                ),
+                                Icon(
+                                  Icons.circle,
+                                  size: 15,
+                                  color: Color(0xFFD9D9D9),
+                                ),
+                                Icon(
+                                  Icons.circle,
+                                  size: 15,
                                   color: Color(0xFF787878),
-                                ),
-                                Icon(
-                                  Icons.circle,
-                                  size: 15,
-                                  color: Color(0xFFD9D9D9),
-                                ),
-                                Icon(
-                                  Icons.circle,
-                                  size: 15,
-                                  color: Color(0xFFD9D9D9),
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: 20,
                         ),
-                        child: Text(
-                          '앞으로 사용할 아이디를 설정해주세요',
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
+                        child: Column(
+                          children: const [
+                            Text(
+                              '인스타 계정을 입력해주세요',
+                              style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '(event 공지/발표)',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -146,7 +158,7 @@ class _Signup_nameState extends State<Signup_name> {
                         TextField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: '영문 + 숫자 10자 이하',
+                            labelText: '@instagram_id',
                           ),
                         )
                       ],
@@ -165,8 +177,7 @@ class _Signup_nameState extends State<Signup_name> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: ((BuildContext context) =>
-                                  const Signup_group()),
+                              builder: ((BuildContext context) => const Home()),
                               fullscreenDialog: true,
                             ),
                           );
