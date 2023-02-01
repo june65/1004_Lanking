@@ -30,7 +30,7 @@ class Login extends StatelessWidget {
               tag: 'main_symbol',
               child: Center(
                 child: Image.network(
-                  'https://s3-alpha-sig.figma.com/img/6976/fcb3/4c86021c9697c169dc32a088c690cc7b?Expires=1675036800&Signature=gFePITCQednkmSwGjHnL4mdYHdIblBAgRHc20gAB4KQ2~g6A7UQu6TFWSxus72tPmD--ldIOMxfkORYUIx5lGvzIcwE3J~b-71iRY9Cc7MUgBED0eikUGqc~bfuPINSRoIAgxCuVsGWG9SIGtxjBH3Fev2Kt~mC2f8~m9Q6XyGAk632zdI0MelP7eXNoS3hovyWw~UbCtFbxDCrHT4CPxK20p4V4HvILJqKsMIwnSaIJZ5q7XM955mTTYf3kM72T41f7c1YliKx5bR4BHoXL0LvI7~Hp39EWg-nPSRqhTUr6djDyEZAkM4qLQA6ewAqqxNqg9~h9P~IbMhmCdZJYsw__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+                  'https://s3-alpha-sig.figma.com/img/6976/fcb3/4c86021c9697c169dc32a088c690cc7b?Expires=1676246400&Signature=g9gIGEs5AiVZIkHTI-Qboh7AGpwje3Pr-B-nCnDQmYkVz3wzQs3df6UBOu9DE35XM2QQfyN1G71PhXLJiaiWHCatb9HTk6ymkeIt6HaAmGTdZfOYY-stbS9LC4YULcQcsoy9trTRswdx2ABObf1nG4~9LoJDI1jiXxXRcUik2z2dXBhhEo8B~p~6Eb419-nuwie~4YejMv09VR4KQnOcwEayS22xBYcMnt3ureyfsFhwNrQgkzpZq6NAkMat8hHdqBI-dtt9d0UID4TPmJRjhq-65bmX4aaTGgaBqCqQqr8ATGPRCkvclTgTYroWqPlL6U5vc9ohipEhxJLfMB2T1g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
                   width: 250,
                 ),
               ),
@@ -39,7 +39,15 @@ class Login extends StatelessWidget {
               height: 120,
             ),
             GestureDetector(
-              onTap: Singup_with_google,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((BuildContext context) => const Signup_name()),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
               child: const Button(
                 text: 'Sign in with Google',
                 iconshape: Icons.g_translate,
@@ -51,7 +59,15 @@ class Login extends StatelessWidget {
               height: 10,
             ),
             GestureDetector(
-              onTap: Singup_with_kakao,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((BuildContext context) => const Signup_name()),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
               child: const Button(
                 text: 'Sign in with Kakao',
                 iconshape: Icons.chat_bubble,
