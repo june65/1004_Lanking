@@ -38,7 +38,7 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: First_Login ? const Login() : const Home(),
+      home: First_Login ? const Login() : const Home(page: 0, group: 0),
     );
   }
 }
