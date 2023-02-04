@@ -1,4 +1,5 @@
 import 'package:angel_lanking/widget/Lanking.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -129,11 +130,10 @@ class _Home_4State extends State<Home_4> {
         ),
         GestureDetector(
           onTap: () async {
-            await launchUrlString(
-                'https://1004lanking.notion.site/0efa505f492845f7843d5af203f0a5bd');
+            FirebaseAuth.instance.signOut();
           },
           child: const my_page_button(
-            text: '회원탈퇴',
+            text: '로그아웃',
           ),
         ),
       ],

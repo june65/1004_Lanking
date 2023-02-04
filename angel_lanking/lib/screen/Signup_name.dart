@@ -1,6 +1,7 @@
 import 'package:angel_lanking/screen/Login.dart';
 import 'package:angel_lanking/screen/Signup_group.dart';
 import 'package:angel_lanking/widget/Button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Signup_name extends StatefulWidget {
@@ -11,7 +12,25 @@ class Signup_name extends StatefulWidget {
 }
 
 class _Signup_nameState extends State<Signup_name> {
-  //TextEditingController tec = TextEditingController();
+  TextEditingController user_id = TextEditingController();
+
+  Color button_color = Colors.grey;
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void button_color_fuction() {
+    if (user_id.text.length >= 5 &&
+        user_id.text.length <= 10 &&
+        user_id.text.replaceAll(RegExp('[^a-zA-Z0-9\\s]'), "") ==
+            user_id.text &&
+        user_id.text.replaceAll(RegExp(' '), "") == user_id.text) {
+      button_color = Colors.black;
+    } else {
+      button_color = Colors.grey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +59,56 @@ class _Signup_nameState extends State<Signup_name> {
                                 width: 150,
                                 height: 100,
                                 fit: BoxFit.fitWidth),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((BuildContext context) =>
-                                        const Login()),
-                                    fullscreenDialog: true,
-                                  ),
-                                );
+                            StreamBuilder(
+                              stream: FirebaseAuth.instance.authStateChanges(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<User?> snapshot) {
+                                return (!snapshot.hasData)
+                                    ? Center(
+                                        child: TextButton(
+                                          child: const Text(
+                                            '<<뒤로',
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Color(0xFF3B3B3B)),
+                                          ),
+                                          onPressed: () {
+                                            FirebaseAuth.instance.signOut();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    ((BuildContext context) =>
+                                                        const Login()),
+                                                fullscreenDialog: true,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      )
+                                    : Center(
+                                        child: TextButton(
+                                          child: const Text(
+                                            '<<뒤로',
+                                            style: TextStyle(
+                                                fontSize: 17,
+                                                color: Color(0xFF3B3B3B)),
+                                          ),
+                                          onPressed: () {
+                                            FirebaseAuth.instance.signOut();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    ((BuildContext context) =>
+                                                        const Login()),
+                                                fullscreenDialog: true,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
                               },
-                              child: const Text(
-                                '<<뒤로',
-                                style: TextStyle(
-                                    fontSize: 17, color: Color(0xFF3B3B3B)),
-                              ),
                             ),
                           ],
                         ),
@@ -142,12 +195,18 @@ class _Signup_nameState extends State<Signup_name> {
                       horizontal: 10,
                     ),
                     child: Column(
-                      children: const [
+                      children: [
                         TextField(
-                          decoration: InputDecoration(
+                          controller: user_id,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: '영문 + 숫자 10자 이하',
+                            labelText: '영문 + 숫자 5~10자',
                           ),
+                          onChanged: (value) {
+                            setState(() {
+                              button_color_fuction();
+                            });
+                          },
                         )
                       ],
                     ),
@@ -162,22 +221,31 @@ class _Signup_nameState extends State<Signup_name> {
                 true
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((BuildContext context) =>
-                                  const Signup_group()),
-                              fullscreenDialog: true,
-                            ),
-                          );
+                          if (user_id.text.length >= 5 &&
+                              user_id.text.length <= 10 &&
+                              user_id.text.replaceAll(
+                                      RegExp('[^a-zA-Z0-9\\s]'), "") ==
+                                  user_id.text &&
+                              user_id.text.replaceAll(RegExp(' '), "") ==
+                                  user_id.text) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((BuildContext context) =>
+                                    Signup_group(
+                                      user_id_save: user_id.text,
+                                    )),
+                                fullscreenDialog: true,
+                              ),
+                            );
+                          }
                         },
-                        child: const Button(
+                        child: Button(
                           text: 'NEXT',
                           iconshape: Icons.check_circle_outline_outlined,
-                          backgroundcolor: Colors.black,
+                          backgroundcolor: button_color,
                           textcolor: Colors.white,
-                        ),
-                      )
+                        ))
                     : const SizedBox(
                         height: 0,
                       ),

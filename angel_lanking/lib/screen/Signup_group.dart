@@ -4,14 +4,22 @@ import 'package:angel_lanking/widget/Button.dart';
 import 'package:flutter/material.dart';
 
 class Signup_group extends StatefulWidget {
-  const Signup_group({super.key});
+  final String user_id_save;
+  const Signup_group({super.key, required this.user_id_save});
 
   @override
   State<Signup_group> createState() => _Signup_groupState();
 }
 
 class _Signup_groupState extends State<Signup_group> {
-  //TextEditingController tec = TextEditingController();
+  String group = '';
+  late String user_id;
+
+  @override
+  void initState() {
+    super.initState();
+    user_id = widget.user_id_save;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +186,9 @@ class _Signup_groupState extends State<Signup_group> {
                             context,
                             MaterialPageRoute(
                               builder: ((BuildContext context) =>
-                                  const Signup_instagram()),
+                                  Signup_instagram(
+                                      user_id_save: user_id,
+                                      group_save: 'group_save')),
                               fullscreenDialog: true,
                             ),
                           );

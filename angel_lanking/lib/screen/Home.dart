@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var page_number = 0;
-  var group_number = 0;
+  var group_number = 1;
 
   @override
   void initState() {
@@ -143,7 +143,8 @@ class _HomeState extends State<Home> {
                                       context,
                                       MaterialPageRoute(
                                         builder: ((BuildContext context) =>
-                                            const Signup_group()),
+                                            const Signup_group(
+                                                user_id_save: 'user_id_save')),
                                         fullscreenDialog: true,
                                       ),
                                     );

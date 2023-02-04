@@ -2,16 +2,49 @@ import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Signup_group.dart';
 import 'package:angel_lanking/widget/Button.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Signup_instagram extends StatefulWidget {
-  const Signup_instagram({super.key});
+  final String user_id_save;
+  final String group_save;
+
+  const Signup_instagram(
+      {super.key, required this.user_id_save, required this.group_save});
 
   @override
   State<Signup_instagram> createState() => _Signup_instagramState();
 }
 
 class _Signup_instagramState extends State<Signup_instagram> {
-  //TextEditingController tec = TextEditingController();
+  late SharedPreferences prefs;
+  late String user_id;
+  late String group;
+
+  @override
+  void initState() {
+    super.initState();
+    user_id = widget.user_id_save;
+    group = widget.group_save;
+  }
+
+  Future save_user_id() async {
+    //createData();
+    prefs = await SharedPreferences.getInstance();
+    await prefs.setString('Login', user_id);
+    print(user_id);
+  }
+
+  TextEditingController instagram_id = TextEditingController();
+  Color button_color = Colors.grey;
+
+  void button_color_fuction() {
+    if (instagram_id.text.length >= 4 &&
+        instagram_id.text.replaceAll(RegExp(' '), "") == instagram_id.text) {
+      button_color = Colors.black;
+    } else {
+      button_color = Colors.grey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +79,9 @@ class _Signup_instagramState extends State<Signup_instagram> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((BuildContext context) =>
-                                        const Signup_group()),
+                                        const Signup_group(
+                                          user_id_save: '',
+                                        )),
                                     fullscreenDialog: true,
                                   ),
                                 );
@@ -134,7 +169,7 @@ class _Signup_instagramState extends State<Signup_instagram> {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              '(event 공지/발표)',
+                              '(EVENT 당첨자 발표)',
                               style: TextStyle(
                                 fontSize: 20,
                                 color: Colors.black,
@@ -154,12 +189,18 @@ class _Signup_instagramState extends State<Signup_instagram> {
                       horizontal: 10,
                     ),
                     child: Column(
-                      children: const [
+                      children: [
                         TextField(
-                          decoration: InputDecoration(
+                          controller: instagram_id,
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: '@instagram_id',
                           ),
+                          onChanged: (value) {
+                            setState(() {
+                              button_color_fuction();
+                            });
+                          },
                         )
                       ],
                     ),
@@ -174,22 +215,26 @@ class _Signup_instagramState extends State<Signup_instagram> {
                 true
                     ? GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((BuildContext context) =>
-                                  const Home(page: 2, group: 3)),
-                              fullscreenDialog: true,
-                            ),
-                          );
+                          if (instagram_id.text.length >= 4 &&
+                              instagram_id.text.replaceAll(RegExp(' '), "") ==
+                                  instagram_id.text) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((BuildContext context) =>
+                                    const Home(page: 0, group: 1)),
+                                fullscreenDialog: true,
+                              ),
+                            );
+                            save_user_id();
+                          }
                         },
-                        child: const Button(
-                          text: 'START',
+                        child: Button(
+                          text: 'NEXT',
                           iconshape: Icons.check_circle_outline_outlined,
-                          backgroundcolor: Colors.black,
+                          backgroundcolor: button_color,
                           textcolor: Colors.white,
-                        ),
-                      )
+                        ))
                     : const SizedBox(
                         height: 0,
                       ),

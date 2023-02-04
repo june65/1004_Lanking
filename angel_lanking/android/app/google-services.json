@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "187162339964",
+    "firebase_url": "https://lanking-48f83-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "lanking-48f83",
+    "storage_bucket": "lanking-48f83.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187162339964:android:4950f23c64da4dc30637f9",
+        "android_client_info": {
+          "package_name": "com.example.angel_lanking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187162339964-kg5nt6slen75lgjj75d850viapv3ijuu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF70w2N7KyzGoQKZR4qLMRBuKtT_vkfCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187162339964-kg5nt6slen75lgjj75d850viapv3ijuu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "187162339964-v7fu38cmdacgj9i64hf7hihgp340r7j2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.angelLanking"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
