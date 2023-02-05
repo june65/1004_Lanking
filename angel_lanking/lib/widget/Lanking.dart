@@ -2,11 +2,19 @@ import 'package:angel_lanking/screen/Signup_name.dart';
 import 'package:flutter/material.dart';
 
 class Lanking extends StatelessWidget {
+  final String name;
+  final String group;
+  final String lank;
+  final int point;
   final int cost;
   final int total;
 
   const Lanking({
     super.key,
+    required this.name,
+    required this.group,
+    required this.lank,
+    required this.point,
     required this.cost,
     required this.total,
   });
@@ -53,16 +61,16 @@ class Lanking extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          '홍길동',
-                          style: TextStyle(
+                        Text(
+                          name,
+                          style: const TextStyle(
                             fontSize: 17,
                             color: Colors.black,
                           ),
                         ),
                         Row(
-                          children: const [
-                            Padding(
+                          children: [
+                            const Padding(
                               padding: EdgeInsets.only(
                                 right: 5,
                                 top: 5,
@@ -74,8 +82,8 @@ class Lanking extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '초록우산 어린이재단',
-                              style: TextStyle(
+                              group,
+                              style: const TextStyle(
                                 fontSize: 10,
                                 color: Color(0xFF464646),
                               ),
@@ -85,16 +93,16 @@ class Lanking extends StatelessWidget {
                         const SizedBox(
                           height: 15,
                         ),
-                        const Text(
-                          '실버 III 97.5%',
-                          style: TextStyle(
+                        Text(
+                          lank,
+                          style: const TextStyle(
                             fontSize: 13,
                             color: Color(0xFF464646),
                           ),
                         ),
-                        const Text(
-                          '(721,322/1,012,341)',
-                          style: TextStyle(
+                        Text(
+                          '($cost/$total)',
+                          style: const TextStyle(
                             fontSize: 10,
                             color: Color(0xFFAEAEAE),
                           ),
@@ -139,20 +147,20 @@ class Lanking extends StatelessWidget {
                           ),
                         ),
                         Row(
-                          children: const [
+                          children: [
                             Text(
-                              '총 기부금 : 1,000,000원',
-                              style: TextStyle(
+                              '총 기부금 : $cost원',
+                              style: const TextStyle(
                                 fontSize: 10,
                                 color: Color(0xFF464646),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             Text(
-                              '총 기부점수 : 3,114점',
-                              style: TextStyle(
+                              '총 기부점수 :$point점',
+                              style: const TextStyle(
                                 fontSize: 10,
                                 color: Color(0xFF464646),
                               ),

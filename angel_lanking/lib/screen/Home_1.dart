@@ -1,3 +1,5 @@
+import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/widget/Banner.dart';
 import 'package:angel_lanking/widget/Lanking.dart';
@@ -5,21 +7,50 @@ import 'package:angel_lanking/widget/Website.dart';
 import 'package:flutter/material.dart';
 
 class Home_1 extends StatefulWidget {
-  const Home_1({super.key});
+  final String userID;
+  const Home_1({
+    super.key,
+    required this.userID,
+  });
 
   @override
   State<Home_1> createState() => _Home_1State();
 }
 
 class _Home_1State extends State<Home_1> {
+  late Future<UserModel>? usermodel;
   var total = 1000;
   var cost = 800;
+  @override
+  void initState() {
+    super.initState();
+    usermodel = ApiService.getUserdata(widget.userID);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Lanking(cost: cost, total: total),
+        FutureBuilder(
+            future: usermodel,
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                return Lanking(
+                    name: snapshot.data!.name,
+                    group: snapshot.data!.group,
+                    lank: '실버 III 80%',
+                    point: 0,
+                    cost: cost,
+                    total: total);
+              }
+              return Lanking(
+                  name: '...',
+                  group: '...',
+                  lank: '...',
+                  point: 0,
+                  cost: cost,
+                  total: total);
+            })),
         const Banners(
           image:
               'https://s3-alpha-sig.figma.com/img/193c/1c74/7ba0c7ab9652ef2a73a472fa92be27c5?Expires=1676246400&Signature=PhowIt~jW990RH~j07d-WR8351Dxk46HJVF5EyymdUo9JudtU~UyoJ0gyK6D6~YF2Oa3uAszGO2qDJFKxm7ZV0XpJik-cW~Pa73vO~2uLVFKZGk2Msy3iojJLtKPfLC8duX~-OF0Lj90LoRQ5sYlCE0X6SH0J6Sra7j4Hz~Uxmf6uMjttSdRlWXzBpgXob~Q3-x3BPBrcSVaRVRRGpeITdELCx1k0zYQRiEz~cJna7OiI9U9cZ8JDgu8MlfCTXGP3JMuovDK3r3lRWcrAJZMrDhnDV2oPSuEUiO9eJYfsdNu2vGnQTNQ5mAsmtYbUCVW3PBfWETcNt49QZWf6JnaAg__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
@@ -99,8 +130,11 @@ class _Home_1State extends State<Home_1> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((BuildContext context) =>
-                        const Home(page: 2, group: 3)),
+                    builder: ((BuildContext context) => Home(
+                          page: 2,
+                          group: 3,
+                          userID: widget.userID,
+                        )),
                     fullscreenDialog: true,
                   ),
                 );
@@ -225,8 +259,11 @@ class _Home_1State extends State<Home_1> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((BuildContext context) =>
-                        const Home(page: 2, group: 1)),
+                    builder: ((BuildContext context) => Home(
+                          page: 2,
+                          group: 1,
+                          userID: widget.userID,
+                        )),
                     fullscreenDialog: true,
                   ),
                 );
@@ -351,8 +388,11 @@ class _Home_1State extends State<Home_1> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: ((BuildContext context) =>
-                        const Home(page: 2, group: 2)),
+                    builder: ((BuildContext context) => Home(
+                          page: 2,
+                          group: 2,
+                          userID: widget.userID,
+                        )),
                     fullscreenDialog: true,
                   ),
                 );

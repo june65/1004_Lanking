@@ -1,3 +1,5 @@
+import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/widget/Lanking.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,31 +7,39 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Home_4 extends StatefulWidget {
-  const Home_4({super.key});
+  final String userID;
+  const Home_4({
+    super.key,
+    required this.userID,
+  });
 
   @override
   State<Home_4> createState() => _Home_4State();
 }
 
 class _Home_4State extends State<Home_4> {
+  late Future<UserModel>? usermodel;
+  @override
   late TooltipBehavior? _tooltipBehavior;
   late SelectionBehavior _selectionBehavior;
   final List<ChartData> chartData = [
-    ChartData('David', 12, const Color(0xFF1ec0ff)),
-    ChartData('Steve', 10, const Color(0xFF0080ff)),
-    ChartData('Jack', 10, const Color(0xFF03a6ff)),
+    ChartData('Child', 12, const Color(0xFF1ec0ff)),
+    ChartData('Old', 10, const Color(0xFF0080ff)),
+    ChartData('World', 10, const Color(0xFF03a6ff)),
     ChartData('Others', 10, const Color(0xFFa3daff))
   ];
   @override
   void initState() {
+    super.initState();
     _tooltipBehavior =
         TooltipBehavior(enable: true, tooltipPosition: TooltipPosition.pointer);
-    super.initState();
+
     _selectionBehavior = SelectionBehavior(
       enable: true,
       toggleSelection: false,
     );
-    super.initState();
+    print(widget.userID);
+    usermodel = ApiService.getUserdata(widget.userID);
   }
 
   var total = 1000;
@@ -38,7 +48,26 @@ class _Home_4State extends State<Home_4> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Lanking(cost: cost, total: total),
+        FutureBuilder(
+            future: usermodel,
+            builder: ((context, snapshot) {
+              if (snapshot.hasData) {
+                return Lanking(
+                    name: snapshot.data!.name,
+                    group: snapshot.data!.group,
+                    lank: '실버 III 80%',
+                    point: 0,
+                    cost: cost,
+                    total: total);
+              }
+              return Lanking(
+                  name: '...',
+                  group: '...',
+                  lank: '...',
+                  point: 0,
+                  cost: cost,
+                  total: total);
+            })),
         Padding(
           padding: const EdgeInsets.only(
             left: 10,

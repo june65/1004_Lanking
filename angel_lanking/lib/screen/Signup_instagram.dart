@@ -221,8 +221,8 @@ class _Signup_instagramState extends State<Signup_instagram> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: ((BuildContext context) =>
-                                    const Home(page: 0, group: 1)),
+                                builder: ((BuildContext context) => const Home(
+                                    page: 0, group: 1, userID: 'userID')),
                                 fullscreenDialog: true,
                               ),
                             );

@@ -3,15 +3,20 @@ import 'package:angel_lanking/screen/Home_2.dart';
 import 'package:angel_lanking/screen/Home_3.dart';
 import 'package:angel_lanking/screen/Home_4.dart';
 import 'package:angel_lanking/screen/Signup_group.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   final int page;
   final int group;
+  final String userID;
+
   const Home({
     super.key,
     required this.page,
     required this.group,
+    required this.userID,
   });
 
   @override
@@ -139,7 +144,7 @@ class _HomeState extends State<Home> {
                                 */
                                 GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
+                                    /*Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: ((BuildContext context) =>
@@ -147,7 +152,7 @@ class _HomeState extends State<Home> {
                                                 user_id_save: 'user_id_save')),
                                         fullscreenDialog: true,
                                       ),
-                                    );
+                                    );*/
                                   },
                                   child: const Icon(
                                     Icons.notifications_none_outlined,
@@ -162,14 +167,18 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  page_number == 0 ? const Home_1() : Column(),
+                  page_number == 0 ? Home_1(userID: widget.userID) : Column(),
                   page_number == 1 ? const Home_2() : Column(),
                   page_number == 2
                       ? Home_3(
                           group: group_number,
                         )
                       : Column(),
-                  page_number == 3 ? const Home_4() : Column(),
+                  page_number == 3
+                      ? Home_4(
+                          userID: widget.userID,
+                        )
+                      : Column(),
                 ],
               ),
             ],

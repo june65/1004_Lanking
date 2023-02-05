@@ -1,4 +1,6 @@
+import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/firebase_options.dart';
+import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +24,20 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  late String userID;
+  late Future<UserModel>? usermodel;
+  Future getuserid() async {
+    late FirebaseAuth auth;
+    late Stream<User?> authStatechanges;
+
+    auth = FirebaseAuth.instance;
+    authStatechanges = auth.authStateChanges();
+    authStatechanges.listen((User? user) {
+      userID = user!.uid;
+      usermodel = ApiService.getUserdata(user.uid);
+    });
+  }
+
   late SharedPreferences prefs;
   bool First_Login = true;
   /*
@@ -35,11 +51,13 @@ class _AppState extends State<App> {
     } else {
       First_Login = true;
     }
-  }
+  } 
   */
   @override
   void initState() {
     super.initState();
+    getuserid();
+
     //initPrefs();
   }
 
@@ -51,7 +69,11 @@ class _AppState extends State<App> {
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           return (!snapshot.hasData)
               ? const Login()
-              : const Home(page: 0, group: 1);
+              : Home(
+                  page: 0,
+                  group: 1,
+                  userID: userID,
+                );
         },
       ),
     );
