@@ -1,22 +1,23 @@
+import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/screen/Home_1.dart';
 import 'package:angel_lanking/screen/Home_2.dart';
 import 'package:angel_lanking/screen/Home_3.dart';
 import 'package:angel_lanking/screen/Home_4.dart';
-import 'package:angel_lanking/screen/Signup_group.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   final int page;
   final int group;
   final String userID;
+  final List donationList;
 
   const Home({
     super.key,
     required this.page,
     required this.group,
     required this.userID,
+    required this.donationList,
   });
 
   @override
@@ -24,6 +25,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late Future<List<DonationModel>> getDonationdata;
   var page_number = 0;
   var group_number = 1;
 
@@ -32,6 +34,7 @@ class _HomeState extends State<Home> {
     super.initState();
     page_number = widget.page;
     group_number = widget.group;
+    getDonationdata = ApiService.getDonationdata(widget.donationList);
   }
 
   @override
@@ -167,7 +170,12 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-                  page_number == 0 ? Home_1(userID: widget.userID) : Column(),
+                  page_number == 0
+                      ? Home_1(
+                          userID: widget.userID,
+                          donationList: widget.donationList,
+                        )
+                      : Column(),
                   page_number == 1 ? const Home_2() : Column(),
                   page_number == 2
                       ? Home_3(
@@ -177,6 +185,8 @@ class _HomeState extends State<Home> {
                   page_number == 3
                       ? Home_4(
                           userID: widget.userID,
+                          donationList: widget.donationList,
+                          getDonationdata: getDonationdata,
                         )
                       : Column(),
                 ],

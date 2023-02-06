@@ -1,4 +1,5 @@
 import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/widget/Lanking.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,9 +9,13 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class Home_4 extends StatefulWidget {
   final String userID;
+  final List donationList;
+  final Future<List<DonationModel>> getDonationdata;
   const Home_4({
     super.key,
     required this.userID,
+    required this.donationList,
+    required this.getDonationdata,
   });
 
   @override
@@ -19,14 +24,19 @@ class Home_4 extends StatefulWidget {
 
 class _Home_4State extends State<Home_4> {
   late Future<UserModel>? usermodel;
+
   @override
   late TooltipBehavior? _tooltipBehavior;
   late SelectionBehavior _selectionBehavior;
-  final List<ChartData> chartData = [
+
+  List<ChartData> chartData = [
     ChartData('Child', 12, const Color(0xFF1ec0ff)),
     ChartData('Old', 10, const Color(0xFF0080ff)),
     ChartData('World', 10, const Color(0xFF03a6ff)),
-    ChartData('Others', 10, const Color(0xFFa3daff))
+    ChartData('Others', 10, const Color(0xFFa3daff)),
+    ChartData('Others', 10, const Color(0xFFa3daff)),
+    ChartData('Others', 10, const Color(0xFFa3daff)),
+    ChartData('Others', 10, const Color(0xFFa3daff)),
   ];
   @override
   void initState() {
@@ -38,8 +48,9 @@ class _Home_4State extends State<Home_4> {
       enable: true,
       toggleSelection: false,
     );
-    print(widget.userID);
     usermodel = ApiService.getUserdata(widget.userID);
+
+    print(widget.getDonationdata);
   }
 
   var total = 1000;

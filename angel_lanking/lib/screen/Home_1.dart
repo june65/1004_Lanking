@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 
 class Home_1 extends StatefulWidget {
   final String userID;
+  final List donationList;
   const Home_1({
     super.key,
     required this.userID,
+    required this.donationList,
   });
 
   @override
@@ -19,12 +21,18 @@ class Home_1 extends StatefulWidget {
 
 class _Home_1State extends State<Home_1> {
   late Future<UserModel>? usermodel;
+
+  //late Future<List<DonationModel>> getDonationdata;
+
   var total = 1000;
   var cost = 800;
+
   @override
   void initState() {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
+
+    //getDonationdata = ApiService.getDonationdata(widget.donationList);
   }
 
   @override
@@ -134,6 +142,7 @@ class _Home_1State extends State<Home_1> {
                           page: 2,
                           group: 3,
                           userID: widget.userID,
+                          donationList: widget.donationList,
                         )),
                     fullscreenDialog: true,
                   ),
@@ -263,6 +272,7 @@ class _Home_1State extends State<Home_1> {
                           page: 2,
                           group: 1,
                           userID: widget.userID,
+                          donationList: widget.donationList,
                         )),
                     fullscreenDialog: true,
                   ),
@@ -392,6 +402,7 @@ class _Home_1State extends State<Home_1> {
                           page: 2,
                           group: 2,
                           userID: widget.userID,
+                          donationList: widget.donationList,
                         )),
                     fullscreenDialog: true,
                   ),

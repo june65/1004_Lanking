@@ -26,6 +26,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late String userID;
   late Future<UserModel>? usermodel;
+
   Future getuserid() async {
     late FirebaseAuth auth;
     late Stream<User?> authStatechanges;
@@ -53,11 +54,11 @@ class _AppState extends State<App> {
     }
   } 
   */
+
   @override
   void initState() {
     super.initState();
     getuserid();
-
     //initPrefs();
   }
 
@@ -69,11 +70,20 @@ class _AppState extends State<App> {
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           return (!snapshot.hasData)
               ? const Login()
-              : Home(
-                  page: 0,
-                  group: 1,
-                  userID: userID,
-                );
+              : FutureBuilder(
+                  future: usermodel,
+                  builder: ((context, userSnapshot) {
+                    if (userSnapshot.hasData) {
+                      return Home(
+                        page: 0,
+                        group: 1,
+                        userID: userID,
+                        donationList: userSnapshot.data!.donation,
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }));
         },
       ),
     );
