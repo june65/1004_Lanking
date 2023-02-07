@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Signup_instagram extends StatefulWidget {
   final String user_id_save;
   final String group_save;
-
-  const Signup_instagram(
-      {super.key, required this.user_id_save, required this.group_save});
+  const Signup_instagram({
+    super.key,
+    required this.user_id_save,
+    required this.group_save,
+  });
 
   @override
   State<Signup_instagram> createState() => _Signup_instagramState();

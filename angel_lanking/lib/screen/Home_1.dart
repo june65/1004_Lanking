@@ -1,4 +1,5 @@
 import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/widget/Banner.dart';
@@ -22,7 +23,7 @@ class Home_1 extends StatefulWidget {
 class _Home_1State extends State<Home_1> {
   late Future<UserModel>? usermodel;
 
-  //late Future<List<DonationModel>> getDonationdata;
+  late Future<List<DonationModel>> getDonationdata;
 
   var total = 1000;
   var cost = 800;
@@ -32,7 +33,7 @@ class _Home_1State extends State<Home_1> {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
 
-    //getDonationdata = ApiService.getDonationdata(widget.donationList);
+    getDonationdata = ApiService.getDonationdata(widget.donationList);
   }
 
   @override
@@ -133,59 +134,67 @@ class _Home_1State extends State<Home_1> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((BuildContext context) => Home(
-                          page: 2,
-                          group: 3,
-                          userID: widget.userID,
-                          donationList: widget.donationList,
-                        )),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF3F3F3),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        child: Text(
-                          '자세히 보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
+            FutureBuilder(
+              future: getDonationdata,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((BuildContext context) => Home(
+                                page: 2,
+                                group: 3,
+                                userID: widget.userID,
+                                donationList: widget.donationList,
+                              )),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF3F3F3),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
                           ),
                         ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 13),
+                              child: Text(
+                                '자세히 보기',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            )
+                          ],
+                        ),
                       ),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 20,
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  );
+                }
+                return Container();
+              },
             ),
           ],
         ),
@@ -263,60 +272,68 @@ class _Home_1State extends State<Home_1> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((BuildContext context) => Home(
-                          page: 2,
-                          group: 1,
-                          userID: widget.userID,
-                          donationList: widget.donationList,
-                        )),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF3F3F3),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        child: Text(
-                          '자세히 보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
+            FutureBuilder(
+              future: getDonationdata,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((BuildContext context) => Home(
+                                page: 2,
+                                group: 1,
+                                userID: widget.userID,
+                                donationList: widget.donationList,
+                              )),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 10,
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF3F3F3),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
                           ),
                         ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 13),
+                              child: Text(
+                                '자세히 보기',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            )
+                          ],
+                        ),
                       ),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 20,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                    ),
+                  );
+                }
+                return Container();
+              },
+            )
           ],
         ),
         const Banners(
@@ -388,60 +405,6 @@ class _Home_1State extends State<Home_1> {
                         ),
                       ),
                       const Company_Lanking(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((BuildContext context) => Home(
-                          page: 2,
-                          group: 2,
-                          userID: widget.userID,
-                          donationList: widget.donationList,
-                        )),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 10,
-                  left: 10,
-                  right: 10,
-                ),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF3F3F3),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 13),
-                        child: Text(
-                          '자세히 보기',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 20,
-                      )
                     ],
                   ),
                 ),

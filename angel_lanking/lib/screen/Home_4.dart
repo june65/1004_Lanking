@@ -1,16 +1,16 @@
 import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/user.dart';
+import 'package:angel_lanking/widget/Graph.dart';
 import 'package:angel_lanking/widget/Lanking.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class Home_4 extends StatefulWidget {
   final String userID;
   final List donationList;
-  final Future<List<DonationModel>> getDonationdata;
+  final List<DonationModel> getDonationdata;
   const Home_4({
     super.key,
     required this.userID,
@@ -24,33 +24,35 @@ class Home_4 extends StatefulWidget {
 
 class _Home_4State extends State<Home_4> {
   late Future<UserModel>? usermodel;
+  late Future<List<num>>? donationGroupList;
 
-  @override
-  late TooltipBehavior? _tooltipBehavior;
-  late SelectionBehavior _selectionBehavior;
-
-  List<ChartData> chartData = [
-    ChartData('Child', 12, const Color(0xFF1ec0ff)),
-    ChartData('Old', 10, const Color(0xFF0080ff)),
-    ChartData('World', 10, const Color(0xFF03a6ff)),
-    ChartData('Others', 10, const Color(0xFFa3daff)),
-    ChartData('Others', 10, const Color(0xFFa3daff)),
-    ChartData('Others', 10, const Color(0xFFa3daff)),
-    ChartData('Others', 10, const Color(0xFFa3daff)),
-  ];
   @override
   void initState() {
     super.initState();
-    _tooltipBehavior =
-        TooltipBehavior(enable: true, tooltipPosition: TooltipPosition.pointer);
-
-    _selectionBehavior = SelectionBehavior(
-      enable: true,
-      toggleSelection: false,
-    );
     usermodel = ApiService.getUserdata(widget.userID);
+    donationGroupList = getDonationGroupdata(widget.getDonationdata);
+  }
 
-    print(widget.getDonationdata);
+  static Future<List<num>> getDonationGroupdata(List DonationGroupList) async {
+    late num Child = 0;
+    late num Old = 0;
+    late num World = 0;
+    late num Others = 0;
+    for (int i = 0; i < DonationGroupList.length; i++) {
+      if (DonationGroupList[i].group == 'child') {
+        Child += DonationGroupList[i].money;
+      }
+      if (DonationGroupList[i].group == 'old') {
+        Old += DonationGroupList[i].money;
+      }
+      if (DonationGroupList[i].group == 'world') {
+        World += DonationGroupList[i].money;
+      }
+      if (DonationGroupList[i].group == 'others') {
+        Others += DonationGroupList[i].money;
+      }
+    }
+    return [Child, Old, World, Others];
   }
 
   var total = 1000;
@@ -79,76 +81,14 @@ class _Home_4State extends State<Home_4> {
                   cost: cost,
                   total: total);
             })),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 10,
-            right: 10,
-            top: 5,
-          ),
-          child: Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 1.0,
-                color: const Color(0xFFCCCCCC),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 7),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: const [
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              '기부동향 분석',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    child: SfCircularChart(
-                      tooltipBehavior: _tooltipBehavior,
-                      legend: Legend(
-                          isVisible: true,
-                          position: LegendPosition.bottom,
-                          // Overflowing legend content will be wraped
-                          overflowMode: LegendItemOverflowMode.wrap),
-                      series: <CircularSeries>[
-                        DoughnutSeries<ChartData, String>(
-                          dataSource: chartData,
-                          xValueMapper: (ChartData data, _) => data.x,
-                          yValueMapper: (ChartData data, _) => data.y,
-                          pointColorMapper: (ChartData data, _) => data.color,
-                          selectionBehavior: _selectionBehavior,
-                          innerRadius: '75%',
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+        FutureBuilder(
+          future: donationGroupList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Graph(donationGroupList: snapshot.data!);
+            }
+            return Container();
+          },
         ),
         GestureDetector(
           onTap: () async {
@@ -246,12 +186,4 @@ class my_page_button extends StatelessWidget {
       ),
     );
   }
-}
-
-class ChartData {
-  ChartData(this.x, this.y, [this.color]);
-
-  final String x;
-  final double y;
-  final Color? color;
 }

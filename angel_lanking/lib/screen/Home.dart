@@ -183,10 +183,18 @@ class _HomeState extends State<Home> {
                         )
                       : Column(),
                   page_number == 3
-                      ? Home_4(
-                          userID: widget.userID,
-                          donationList: widget.donationList,
-                          getDonationdata: getDonationdata,
+                      ? FutureBuilder(
+                          future: getDonationdata,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Home_4(
+                                userID: widget.userID,
+                                donationList: widget.donationList,
+                                getDonationdata: snapshot.data!,
+                              );
+                            }
+                            return Container();
+                          },
                         )
                       : Column(),
                 ],
