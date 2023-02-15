@@ -100,10 +100,7 @@ class _Home_4State extends State<Home_4> {
           ),
         ),
         GestureDetector(
-          onTap: () async {
-            await launchUrlString(
-                'https://1004lanking.notion.site/0efa505f492845f7843d5af203f0a5bd');
-          },
+          onTap: () {},
           child: const my_page_button(
             text: '회원정보',
           ),

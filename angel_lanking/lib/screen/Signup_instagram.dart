@@ -1,16 +1,20 @@
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Signup_group.dart';
 import 'package:angel_lanking/widget/Button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Signup_instagram extends StatefulWidget {
+  final String userID;
   final String user_id_save;
   final String group_save;
+
   const Signup_instagram({
     super.key,
     required this.user_id_save,
     required this.group_save,
+    required this.userID,
   });
 
   @override
@@ -19,6 +23,7 @@ class Signup_instagram extends StatefulWidget {
 
 class _Signup_instagramState extends State<Signup_instagram> {
   late SharedPreferences prefs;
+
   late String user_id;
   late String group;
 
@@ -28,13 +33,13 @@ class _Signup_instagramState extends State<Signup_instagram> {
     user_id = widget.user_id_save;
     group = widget.group_save;
   }
-
+  /*
   Future save_user_id() async {
     //createData();
     prefs = await SharedPreferences.getInstance();
     await prefs.setString('Login', user_id);
-    print(user_id);
   }
+  */
 
   TextEditingController instagram_id = TextEditingController();
   Color button_color = Colors.grey;
@@ -71,7 +76,7 @@ class _Signup_instagramState extends State<Signup_instagram> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image.network(
-                                'https://s3-alpha-sig.figma.com/img/6976/fcb3/4c86021c9697c169dc32a088c690cc7b?Expires=1676246400&Signature=g9gIGEs5AiVZIkHTI-Qboh7AGpwje3Pr-B-nCnDQmYkVz3wzQs3df6UBOu9DE35XM2QQfyN1G71PhXLJiaiWHCatb9HTk6ymkeIt6HaAmGTdZfOYY-stbS9LC4YULcQcsoy9trTRswdx2ABObf1nG4~9LoJDI1jiXxXRcUik2z2dXBhhEo8B~p~6Eb419-nuwie~4YejMv09VR4KQnOcwEayS22xBYcMnt3ureyfsFhwNrQgkzpZq6NAkMat8hHdqBI-dtt9d0UID4TPmJRjhq-65bmX4aaTGgaBqCqQqr8ATGPRCkvclTgTYroWqPlL6U5vc9ohipEhxJLfMB2T1g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+                                'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/main_logo.png',
                                 width: 150,
                                 height: 100,
                                 fit: BoxFit.fitWidth),
@@ -81,8 +86,9 @@ class _Signup_instagramState extends State<Signup_instagram> {
                                   context,
                                   MaterialPageRoute(
                                     builder: ((BuildContext context) =>
-                                        const Signup_group(
-                                          user_id_save: '',
+                                        Signup_group(
+                                          user_id_save: widget.user_id_save,
+                                          userID: widget.userID,
                                         )),
                                     fullscreenDialog: true,
                                   ),
@@ -216,23 +222,31 @@ class _Signup_instagramState extends State<Signup_instagram> {
               children: [
                 true
                     ? GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (instagram_id.text.length >= 4 &&
                               instagram_id.text.replaceAll(RegExp(' '), "") ==
                                   instagram_id.text) {
+                            await FirebaseFirestore.instance
+                                .collection('user')
+                                .doc(widget.userID)
+                                .set({
+                              'name': widget.user_id_save,
+                              'donation': [],
+                              'instagram': instagram_id.text,
+                              'group': widget.group_save
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: ((BuildContext context) => const Home(
+                                builder: ((BuildContext context) => Home(
                                       page: 0,
                                       group: 1,
-                                      userID: 'userID',
-                                      donationList: ['donationList'],
+                                      userID: widget.userID,
+                                      donationList: const [''],
                                     )),
                                 fullscreenDialog: true,
                               ),
                             );
-                            save_user_id();
                           }
                         },
                         child: Button(

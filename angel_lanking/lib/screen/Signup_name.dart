@@ -5,7 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Signup_name extends StatefulWidget {
-  const Signup_name({super.key});
+  final String userID;
+  const Signup_name({
+    super.key,
+    required this.userID,
+  });
 
   @override
   State<Signup_name> createState() => _Signup_nameState();
@@ -55,7 +59,7 @@ class _Signup_nameState extends State<Signup_name> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Image.network(
-                                'https://s3-alpha-sig.figma.com/img/6976/fcb3/4c86021c9697c169dc32a088c690cc7b?Expires=1676246400&Signature=g9gIGEs5AiVZIkHTI-Qboh7AGpwje3Pr-B-nCnDQmYkVz3wzQs3df6UBOu9DE35XM2QQfyN1G71PhXLJiaiWHCatb9HTk6ymkeIt6HaAmGTdZfOYY-stbS9LC4YULcQcsoy9trTRswdx2ABObf1nG4~9LoJDI1jiXxXRcUik2z2dXBhhEo8B~p~6Eb419-nuwie~4YejMv09VR4KQnOcwEayS22xBYcMnt3ureyfsFhwNrQgkzpZq6NAkMat8hHdqBI-dtt9d0UID4TPmJRjhq-65bmX4aaTGgaBqCqQqr8ATGPRCkvclTgTYroWqPlL6U5vc9ohipEhxJLfMB2T1g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+                                'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/main_logo.png',
                                 width: 150,
                                 height: 100,
                                 fit: BoxFit.fitWidth),
@@ -234,6 +238,7 @@ class _Signup_nameState extends State<Signup_name> {
                                 builder: ((BuildContext context) =>
                                     Signup_group(
                                       user_id_save: user_id.text,
+                                      userID: widget.userID,
                                     )),
                                 fullscreenDialog: true,
                               ),

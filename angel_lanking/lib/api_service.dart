@@ -7,6 +7,7 @@ class ApiService {
     var result =
         await FirebaseFirestore.instance.collection('user').doc(Userid).get();
     print(result.data().toString());
+
     return UserModel.fromJson(result.data());
   }
 
@@ -29,21 +30,18 @@ class ApiService {
     }
     return DonationInstances;
   }
-  /*
-  
-  static Future<List<WebtoonModel>> getTodaysToons() async {
-    List<WebtoonModel> webtoonInstances = [];
-    final url = Uri.parse('$baseUrl/$today');
-    final response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      final List<dynamic> webtoons = jsonDecode(response.body);
-      for (var webtoon in webtoons) {
-        final instance = WebtoonModel.fromJson(webtoon);
-        webtoonInstances.add(instance);
-      }
-      return webtoonInstances;
+  static Future<bool> findUserdata(String Userid) async {
+    var findUserdataResult = '';
+    var findUser =
+        await FirebaseFirestore.instance.collection('user').doc(Userid).get();
+
+    findUserdataResult = findUser.toString();
+
+    if (findUserdataResult == '') {
+      return true;
+    } else {
+      return false;
     }
-    throw Error();
-  }*/
+  }
 }

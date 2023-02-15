@@ -1,4 +1,3 @@
-import 'package:angel_lanking/screen/Signup_name.dart';
 import 'package:angel_lanking/widget/Button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +60,7 @@ class _LoginState extends State<Login> {
               tag: 'main_symbol',
               child: Center(
                 child: Image.network(
-                  'https://s3-alpha-sig.figma.com/img/6976/fcb3/4c86021c9697c169dc32a088c690cc7b?Expires=1676246400&Signature=g9gIGEs5AiVZIkHTI-Qboh7AGpwje3Pr-B-nCnDQmYkVz3wzQs3df6UBOu9DE35XM2QQfyN1G71PhXLJiaiWHCatb9HTk6ymkeIt6HaAmGTdZfOYY-stbS9LC4YULcQcsoy9trTRswdx2ABObf1nG4~9LoJDI1jiXxXRcUik2z2dXBhhEo8B~p~6Eb419-nuwie~4YejMv09VR4KQnOcwEayS22xBYcMnt3ureyfsFhwNrQgkzpZq6NAkMat8hHdqBI-dtt9d0UID4TPmJRjhq-65bmX4aaTGgaBqCqQqr8ATGPRCkvclTgTYroWqPlL6U5vc9ohipEhxJLfMB2T1g__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
+                  'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/main_logo.png',
                   width: 250,
                 ),
               ),
@@ -82,15 +81,7 @@ class _LoginState extends State<Login> {
               height: 10,
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((BuildContext context) => const Signup_name()),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
+              onTap: () {},
               child: const Button(
                 text: 'Sign in with Kakao',
                 iconshape: Icons.chat_bubble,
@@ -102,15 +93,7 @@ class _LoginState extends State<Login> {
               height: 10,
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((BuildContext context) => const Signup_name()),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
+              onTap: () {},
               child: const Button(
                 text: 'Sign in with Apple',
                 iconshape: Icons.apple,

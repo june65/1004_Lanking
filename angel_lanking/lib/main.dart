@@ -3,6 +3,7 @@ import 'package:angel_lanking/firebase_options.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Login.dart';
+import 'package:angel_lanking/screen/Signup_name.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   late String userID;
   late Future<UserModel>? usermodel;
+  late Future<bool>? userexist;
 
   Future getuserid() async {
     late FirebaseAuth auth;
@@ -35,6 +37,7 @@ class _AppState extends State<App> {
     authStatechanges = auth.authStateChanges();
     authStatechanges.listen((User? user) {
       userID = user!.uid;
+      userexist = ApiService.findUserdata(user.uid);
       usermodel = ApiService.getUserdata(user.uid);
     });
   }
@@ -74,12 +77,20 @@ class _AppState extends State<App> {
                   future: usermodel,
                   builder: ((context, userSnapshot) {
                     if (userSnapshot.hasData) {
-                      return Home(
-                        page: 0,
-                        group: 1,
-                        userID: userID,
-                        donationList: userSnapshot.data!.donation,
-                      );
+                      return FutureBuilder(
+                          future: userexist,
+                          builder: ((context, userSnapshot2) {
+                            if (userSnapshot2.data == false) {
+                              return Home(
+                                page: 0,
+                                group: 1,
+                                userID: userID,
+                                donationList: userSnapshot.data!.donation,
+                              );
+                            } else {
+                              return Signup_name(userID: userID);
+                            }
+                          }));
                     } else {
                       return Container();
                     }
