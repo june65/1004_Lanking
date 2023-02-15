@@ -88,11 +88,11 @@ class _AppState extends State<App> {
                                 donationList: userSnapshot.data!.donation,
                               );
                             } else {
-                              return Signup_name(userID: userID);
+                              return Container();
                             }
                           }));
                     } else {
-                      return Container();
+                      return Signup_name(userID: userID);
                     }
                   }));
         },
