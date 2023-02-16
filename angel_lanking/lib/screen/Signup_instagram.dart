@@ -240,9 +240,10 @@ class _Signup_instagramState extends State<Signup_instagram> {
                               MaterialPageRoute(
                                 builder: ((BuildContext context) => Home(
                                       page: 0,
-                                      group: 1,
+                                      search_group: 1,
                                       userID: widget.userID,
                                       donationList: const [''],
+                                      my_group: 0,
                                     )),
                                 fullscreenDialog: true,
                               ),

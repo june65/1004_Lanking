@@ -2,9 +2,18 @@ import 'package:angel_lanking/widget/Banner.dart';
 import 'package:angel_lanking/widget/Website.dart';
 import 'package:flutter/cupertino.dart';
 
-class Home_2 extends StatelessWidget {
-  const Home_2({super.key});
+class Home_2 extends StatefulWidget {
+  final int my_group;
+  const Home_2({
+    super.key,
+    required this.my_group,
+  });
 
+  @override
+  State<Home_2> createState() => _Home_2State();
+}
+
+class _Home_2State extends State<Home_2> {
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -1,4 +1,7 @@
 import 'package:angel_lanking/model/donation.dart';
+import 'package:angel_lanking/model/donation2.dart';
+import 'package:angel_lanking/model/donation_type.dart';
+import 'package:angel_lanking/model/number.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -6,7 +9,6 @@ class ApiService {
   static Future<UserModel> getUserdata(String Userid) async {
     var result =
         await FirebaseFirestore.instance.collection('user').doc(Userid).get();
-    print(result.data().toString());
 
     return UserModel.fromJson(result.data());
   }
@@ -43,5 +45,42 @@ class ApiService {
     } else {
       return false;
     }
+  }
+
+  static Future<DonationTypeModel> getDonationtype() async {
+    var result = await FirebaseFirestore.instance
+        .collection('donation')
+        .doc('type')
+        .get();
+
+    return DonationTypeModel.fromJson(result.data());
+  }
+
+  static Future<DonationnumberModel> getDonationnumber() async {
+    var result = await FirebaseFirestore.instance
+        .collection('donation')
+        .doc('number')
+        .get();
+
+    return DonationnumberModel.fromJson(result.data());
+  }
+
+  static Future<List<DonationModel2>> getDonationdata2(
+      List userDonationList) async {
+    List<DonationModel2> DonationInstances2 = [];
+
+    int num = userDonationList.length;
+
+    for (int i = 0; i < num; i++) {
+      var result = await FirebaseFirestore.instance
+          .collection('donation_list')
+          .doc(userDonationList[i])
+          .get();
+
+      final instance = DonationModel2.fromJson(result.data());
+      DonationInstances2.add(instance);
+    }
+
+    return DonationInstances2;
   }
 }

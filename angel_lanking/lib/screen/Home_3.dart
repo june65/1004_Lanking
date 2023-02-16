@@ -5,10 +5,12 @@ import 'package:angel_lanking/screen/Search_4.dart';
 import 'package:flutter/material.dart';
 
 class Home_3 extends StatefulWidget {
-  final int group;
+  final int search_group;
+  final int my_group;
   const Home_3({
     super.key,
-    required this.group,
+    required this.search_group,
+    required this.my_group,
   });
 
   @override
@@ -16,11 +18,11 @@ class Home_3 extends StatefulWidget {
 }
 
 class _Home_3State extends State<Home_3> {
-  int _search_number = 1;
+  int _search_group = 1;
   @override
   void initState() {
     super.initState();
-    _search_number = widget.group;
+    _search_group = widget.search_group;
   }
 
   @override
@@ -38,40 +40,40 @@ class _Home_3State extends State<Home_3> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          _search_number = 1;
+                          _search_group = 1;
                         });
                       },
-                      child: _search_number == 1
+                      child: _search_group == 1
                           ? const Selected_button(button_text: '친구')
                           : const None_Selected_button(button_text: '친구'),
                     ),
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          _search_number = 2;
+                          _search_group = 2;
                         });
                       },
-                      child: _search_number == 2
+                      child: _search_group == 2
                           ? const Selected_button(button_text: '단체/회사')
                           : const None_Selected_button(button_text: '단체/회사'),
                     ),
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          _search_number = 3;
+                          _search_group = 3;
                         });
                       },
-                      child: _search_number == 3
+                      child: _search_group == 3
                           ? const Selected_button(button_text: '인플루언서')
                           : const None_Selected_button(button_text: '인플루언서'),
                     ),
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          _search_number = 4;
+                          _search_group = 4;
                         });
                       },
-                      child: _search_number == 4
+                      child: _search_group == 4
                           ? const Selected_button(button_text: '기업')
                           : const None_Selected_button(button_text: '기업'),
                     ),
@@ -83,10 +85,10 @@ class _Home_3State extends State<Home_3> {
         ),
         Column(
           children: [
-            _search_number == 1 ? const Search_1() : Container(),
-            _search_number == 2 ? const Search_2() : Container(),
-            _search_number == 3 ? const Search_3() : Container(),
-            _search_number == 4 ? const Search_4() : Container(),
+            _search_group == 1 ? const Search_1() : Container(),
+            _search_group == 2 ? const Search_2() : Container(),
+            _search_group == 3 ? const Search_3() : Container(),
+            _search_group == 4 ? const Search_4() : Container(),
           ],
         ),
       ],

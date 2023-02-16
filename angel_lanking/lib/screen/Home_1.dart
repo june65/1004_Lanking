@@ -10,10 +10,12 @@ import 'package:flutter/material.dart';
 class Home_1 extends StatefulWidget {
   final String userID;
   final List donationList;
+  final int my_group;
   const Home_1({
     super.key,
     required this.userID,
     required this.donationList,
+    required this.my_group,
   });
 
   @override
@@ -45,20 +47,26 @@ class _Home_1State extends State<Home_1> {
             builder: ((context, snapshot) {
               if (snapshot.hasData) {
                 return Lanking(
-                    name: snapshot.data!.name,
-                    group: snapshot.data!.group,
-                    lank: '실버 III 80%',
-                    point: 0,
-                    cost: cost,
-                    total: total);
-              }
-              return Lanking(
-                  name: '...',
-                  group: '...',
-                  lank: '...',
+                  name: snapshot.data!.name,
+                  group: snapshot.data!.group,
+                  lank: '실버 III 80%',
                   point: 0,
                   cost: cost,
-                  total: total);
+                  total: total,
+                  userID: widget.userID,
+                  donationList: widget.donationList,
+                );
+              }
+              return Lanking(
+                name: '...',
+                group: '...',
+                lank: '...',
+                point: 0,
+                cost: cost,
+                total: total,
+                userID: widget.userID,
+                donationList: widget.donationList,
+              );
             })),
         const Banners(
           image:
@@ -145,9 +153,10 @@ class _Home_1State extends State<Home_1> {
                         MaterialPageRoute(
                           builder: ((BuildContext context) => Home(
                                 page: 2,
-                                group: 3,
+                                search_group: 3,
                                 userID: widget.userID,
                                 donationList: widget.donationList,
+                                my_group: 0,
                               )),
                           fullscreenDialog: true,
                         ),
@@ -283,9 +292,10 @@ class _Home_1State extends State<Home_1> {
                         MaterialPageRoute(
                           builder: ((BuildContext context) => Home(
                                 page: 2,
-                                group: 1,
+                                search_group: 1,
                                 userID: widget.userID,
                                 donationList: widget.donationList,
+                                my_group: 0,
                               )),
                           fullscreenDialog: true,
                         ),

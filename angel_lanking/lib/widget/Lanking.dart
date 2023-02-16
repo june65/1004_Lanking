@@ -1,3 +1,4 @@
+import 'package:angel_lanking/screen/Home.dart';
 import 'package:flutter/material.dart';
 
 class Lanking extends StatelessWidget {
@@ -8,6 +9,9 @@ class Lanking extends StatelessWidget {
   final int cost;
   final int total;
 
+  final String userID;
+  final List donationList;
+
   const Lanking({
     super.key,
     required this.name,
@@ -16,6 +20,8 @@ class Lanking extends StatelessWidget {
     required this.point,
     required this.cost,
     required this.total,
+    required this.userID,
+    required this.donationList,
   });
 
   @override
@@ -174,7 +180,19 @@ class Lanking extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                //Add_page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((BuildContext context) => Home(
+                          page: 3,
+                          search_group: 1,
+                          userID: userID,
+                          donationList: donationList,
+                          my_group: 2,
+                        )),
+                    fullscreenDialog: true,
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(

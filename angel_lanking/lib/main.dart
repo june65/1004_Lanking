@@ -83,9 +83,10 @@ class _AppState extends State<App> {
                             if (userSnapshot2.data == false) {
                               return Home(
                                 page: 0,
-                                group: 1,
+                                search_group: 1,
                                 userID: userID,
                                 donationList: userSnapshot.data!.donation,
+                                my_group: 0,
                               );
                             } else {
                               return Container();

@@ -9,14 +9,16 @@ import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
   final int page;
-  final int group;
+  final int search_group;
+  final int my_group;
   final String userID;
   final List donationList;
 
   const Home({
     super.key,
     required this.page,
-    required this.group,
+    required this.search_group,
+    required this.my_group,
     required this.userID,
     required this.donationList,
   });
@@ -28,13 +30,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late Future<List<DonationModel>> getDonationdata;
   var page_number = 0;
-  var group_number = 1;
+  var search_group_ = 1;
 
   @override
   void initState() {
     super.initState();
     page_number = widget.page;
-    group_number = widget.group;
+    search_group_ = widget.search_group;
     getDonationdata = ApiService.getDonationdata(widget.donationList);
   }
 
@@ -177,12 +179,18 @@ class _HomeState extends State<Home> {
                       ? Home_1(
                           userID: widget.userID,
                           donationList: widget.donationList,
+                          my_group: 0,
                         )
                       : Column(),
-                  page_number == 1 ? const Home_2() : Column(),
+                  page_number == 1
+                      ? const Home_2(
+                          my_group: 0,
+                        )
+                      : Column(),
                   page_number == 2
                       ? Home_3(
-                          group: group_number,
+                          search_group: search_group_,
+                          my_group: 0,
                         )
                       : Column(),
                   page_number == 3
@@ -194,6 +202,7 @@ class _HomeState extends State<Home> {
                                 userID: widget.userID,
                                 donationList: widget.donationList,
                                 getDonationdata: snapshot.data!,
+                                my_group: widget.my_group,
                               );
                             }
                             return Container();
