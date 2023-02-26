@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:angel_lanking/api_service.dart';
-import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/model/donation_type.dart';
 import 'package:angel_lanking/model/number.dart';
@@ -21,7 +20,7 @@ class Home_4 extends StatefulWidget {
   final String userID;
   final List donationList;
   final int my_group;
-  final List<DonationModel> getDonationdata;
+  final List<DonationModel2> getDonationdata;
   const Home_4({
     super.key,
     required this.userID,
@@ -41,6 +40,7 @@ class _Home_4State extends State<Home_4> {
   late Future<DonationnumberModel>? donationnumber;
   late List<dynamic> newdonationList;
   late Future<List<DonationModel2>> getDonationdata2;
+  late Future<List<dynamic>>? donationpoint;
 
   TextEditingController title = TextEditingController();
   TextEditingController detail = TextEditingController();
@@ -141,6 +141,7 @@ class _Home_4State extends State<Home_4> {
     getDonationdata2 = ApiService.getDonationdata2(widget.donationList);
     donation_fuction();
     newdonationList = widget.donationList;
+    donationpoint = getDonationPointdata(widget.getDonationdata);
   }
 
   static Future<List<num>> getDonationGroupdata(List DonationGroupList) async {
@@ -166,8 +167,35 @@ class _Home_4State extends State<Home_4> {
     return [Child, Old, World, Others];
   }
 
-  var total = 1000;
-  var cost = 800;
+  int total = 100000000;
+
+  static Future<List<dynamic>> getDonationPointdata(
+      List<DonationModel2> DonationGroupList) async {
+    late int Sum = 0;
+
+    for (int i = 0; i < DonationGroupList.length; i++) {
+      if (DonationGroupList[i].pass) {
+        Sum += DonationGroupList[i].money;
+      }
+    }
+    late String tear = 'unranked';
+
+    if (Sum > 0) {
+      tear = 'bronze';
+    } else if (Sum > 30000) {
+      tear = 'silver';
+    } else if (Sum > 100000) {
+      tear = 'gold';
+    } else if (Sum > 200000) {
+      tear = 'platinum';
+    } else if (Sum > 500000) {
+      tear = 'Diamond';
+    } else if (Sum > 1000000) {
+      tear = 'master';
+    }
+    return [Sum, tear];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -179,24 +207,40 @@ class _Home_4State extends State<Home_4> {
                       future: usermodel,
                       builder: ((context, snapshot) {
                         if (snapshot.hasData) {
-                          return Lanking(
-                            name: snapshot.data!.name,
-                            group: snapshot.data!.group,
-                            lank: '실버 III 80%',
-                            point: 0,
-                            cost: cost,
-                            total: total,
-                            userID: widget.userID,
-                            donationList: widget.donationList,
-                          );
+                          return FutureBuilder(
+                              future: donationpoint,
+                              builder: (context, snapshotpoint) {
+                                if (snapshotpoint.hasData) {
+                                  return Lanking(
+                                    name: snapshot.data!.name,
+                                    group: snapshot.data!.group,
+                                    lank: '${snapshotpoint.data![1]} III 80%',
+                                    point: 0,
+                                    cost: snapshotpoint.data![0],
+                                    total: total,
+                                    userID: widget.userID,
+                                    donationList: widget.donationList,
+                                  );
+                                }
+                                return Lanking(
+                                  name: '...',
+                                  group: '...',
+                                  lank: '...',
+                                  point: 0,
+                                  cost: 1000,
+                                  total: 2000,
+                                  userID: widget.userID,
+                                  donationList: widget.donationList,
+                                );
+                              });
                         }
                         return Lanking(
                           name: '...',
                           group: '...',
                           lank: '...',
                           point: 0,
-                          cost: cost,
-                          total: total,
+                          cost: 1000,
+                          total: 2000,
                           userID: widget.userID,
                           donationList: widget.donationList,
                         );
@@ -358,9 +402,12 @@ class _Home_4State extends State<Home_4> {
                                                         color: Colors.black,
                                                       ),
                                                     ),
+                                                    const SizedBox(
+                                                      width: 10,
+                                                    ),
                                                     Row(
-                                                      children: const [
-                                                        Padding(
+                                                      children: [
+                                                        const Padding(
                                                           padding:
                                                               EdgeInsets.only(
                                                             right: 5,
@@ -374,37 +421,48 @@ class _Home_4State extends State<Home_4> {
                                                           ),
                                                         ),
                                                         Text(
-                                                          '초록우산 어린이재단',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
+                                                          donation.group,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 15,
                                                             color: Color(
                                                                 0xFF464646),
                                                           ),
                                                         ),
                                                       ],
                                                     ),
-                                                    Row(
-                                                      children: const [
-                                                        Text(
-                                                          '총 기부금 : 1,000,000원',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
-                                                            color: Color(
-                                                                0xFF464646),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Text(
-                                                          '총 기부점수 : 3,114점',
-                                                          style: TextStyle(
-                                                            fontSize: 10,
-                                                            color: Color(
-                                                                0xFF464646),
-                                                          ),
-                                                        ),
-                                                      ],
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      '${donation.money}원',
+                                                      style: const TextStyle(
+                                                        fontSize: 13,
+                                                        color:
+                                                            Color(0xFF464646),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      '날짜:${donation.time.toDate()}',
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFF464646),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      '내용 : ${donation.detail}',
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                        color:
+                                                            Color(0xFF464646),
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -697,7 +755,6 @@ class _Home_4State extends State<Home_4> {
                                               'group': selectedDropdown,
                                               'money': int.parse(money.text),
                                               'title': title.text,
-                                              'ratio': '1.2',
                                               'time': now,
                                               'pass': false,
                                               'user': widget.userID,

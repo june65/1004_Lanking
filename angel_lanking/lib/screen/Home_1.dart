@@ -1,5 +1,6 @@
 import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/model/donation.dart';
+import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/widget/Banner.dart';
@@ -11,11 +12,14 @@ class Home_1 extends StatefulWidget {
   final String userID;
   final List donationList;
   final int my_group;
+  final List<DonationModel2> getDonationdata;
+
   const Home_1({
     super.key,
     required this.userID,
     required this.donationList,
     required this.my_group,
+    required this.getDonationdata,
   });
 
   @override
@@ -24,17 +28,28 @@ class Home_1 extends StatefulWidget {
 
 class _Home_1State extends State<Home_1> {
   late Future<UserModel>? usermodel;
-
+  late Future<int>? donationpoint;
   late Future<List<DonationModel>> getDonationdata;
 
-  var total = 1000;
-  var cost = 800;
+  int total = 100000000;
+
+  static Future<int> getDonationPointdata(
+      List<DonationModel2> DonationGroupList) async {
+    late int Sum = 0;
+
+    for (int i = 0; i < DonationGroupList.length; i++) {
+      if (DonationGroupList[i].pass) {
+        Sum += DonationGroupList[i].money;
+      }
+    }
+    return Sum;
+  }
 
   @override
   void initState() {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
-
+    donationpoint = getDonationPointdata(widget.getDonationdata);
     getDonationdata = ApiService.getDonationdata(widget.donationList);
   }
 
@@ -46,24 +61,40 @@ class _Home_1State extends State<Home_1> {
             future: usermodel,
             builder: ((context, snapshot) {
               if (snapshot.hasData) {
-                return Lanking(
-                  name: snapshot.data!.name,
-                  group: snapshot.data!.group,
-                  lank: '실버 III 80%',
-                  point: 0,
-                  cost: cost,
-                  total: total,
-                  userID: widget.userID,
-                  donationList: widget.donationList,
-                );
+                return FutureBuilder(
+                    future: donationpoint,
+                    builder: (context, snapshotpoint) {
+                      if (snapshotpoint.hasData) {
+                        return Lanking(
+                          name: snapshot.data!.name,
+                          group: snapshot.data!.group,
+                          lank: '실버 III 80%',
+                          point: 0,
+                          cost: snapshotpoint.data!,
+                          total: total,
+                          userID: widget.userID,
+                          donationList: widget.donationList,
+                        );
+                      }
+                      return Lanking(
+                        name: '...',
+                        group: '...',
+                        lank: '...',
+                        point: 0,
+                        cost: 1000,
+                        total: 2000,
+                        userID: widget.userID,
+                        donationList: widget.donationList,
+                      );
+                    });
               }
               return Lanking(
                 name: '...',
                 group: '...',
                 lank: '...',
                 point: 0,
-                cost: cost,
-                total: total,
+                cost: 1000,
+                total: 2000,
                 userID: widget.userID,
                 donationList: widget.donationList,
               );

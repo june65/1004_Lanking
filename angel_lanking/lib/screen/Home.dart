@@ -1,5 +1,5 @@
 import 'package:angel_lanking/api_service.dart';
-import 'package:angel_lanking/model/donation.dart';
+import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/screen/Home_1.dart';
 import 'package:angel_lanking/screen/Home_2.dart';
 import 'package:angel_lanking/screen/Home_3.dart';
@@ -28,7 +28,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<List<DonationModel>> getDonationdata;
+  late Future<List<DonationModel2>> getDonationdata;
   var page_number = 0;
   var search_group_ = 1;
 
@@ -37,7 +37,7 @@ class _HomeState extends State<Home> {
     super.initState();
     page_number = widget.page;
     search_group_ = widget.search_group;
-    getDonationdata = ApiService.getDonationdata(widget.donationList);
+    getDonationdata = ApiService.getDonationdata2(widget.donationList);
   }
 
   @override
@@ -176,10 +176,19 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                   page_number == 0
-                      ? Home_1(
-                          userID: widget.userID,
-                          donationList: widget.donationList,
-                          my_group: 0,
+                      ? FutureBuilder(
+                          future: getDonationdata,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Home_1(
+                                userID: widget.userID,
+                                donationList: widget.donationList,
+                                getDonationdata: snapshot.data!,
+                                my_group: 0,
+                              );
+                            }
+                            return Container();
+                          },
                         )
                       : Column(),
                   page_number == 1
@@ -216,15 +225,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-  @override
-  // TODO: implement hashCode
-  int get hashCode => super.hashCode;
-
-  @override
-  bool operator ==(Object other) {
-    // TODO: implement ==
-    return super == other;
   }
 }
