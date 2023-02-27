@@ -151,49 +151,74 @@ class _Home_4State extends State<Home_4> {
     late num Others = 0;
 
     for (int i = 0; i < DonationGroupList.length; i++) {
-      if (DonationGroupList[i].group == 'child') {
-        Child += DonationGroupList[i].money;
-      }
-      if (DonationGroupList[i].group == 'old') {
-        Old += DonationGroupList[i].money;
-      }
-      if (DonationGroupList[i].group == 'world') {
-        World += DonationGroupList[i].money;
-      }
-      if (DonationGroupList[i].group == 'others') {
-        Others += DonationGroupList[i].money;
+      if (DonationGroupList[i].delete) {
+        if (DonationGroupList[i].pass) {
+          if (DonationGroupList[i].group == 'child') {
+            Child += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == 'old') {
+            Old += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == 'world') {
+            World += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == 'others') {
+            Others += DonationGroupList[i].money;
+          }
+        }
       }
     }
     return [Child, Old, World, Others];
   }
 
-  int total = 100000000;
-
   static Future<List<dynamic>> getDonationPointdata(
-      List<DonationModel2> DonationGroupList) async {
+      List<DonationModel2> DonationPointList) async {
+    late int Start = 0;
+    late int Final = 0;
     late int Sum = 0;
+    late double Persent = 0.0;
 
-    for (int i = 0; i < DonationGroupList.length; i++) {
-      if (DonationGroupList[i].pass) {
-        Sum += DonationGroupList[i].money;
+    for (int i = 0; i < DonationPointList.length; i++) {
+      if (DonationPointList[i].delete) {
+        if (DonationPointList[i].pass) {
+          Sum += DonationPointList[i].money;
+        }
       }
     }
-    late String tear = 'unranked';
 
-    if (Sum > 0) {
-      tear = 'bronze';
-    } else if (Sum > 30000) {
-      tear = 'silver';
-    } else if (Sum > 100000) {
-      tear = 'gold';
-    } else if (Sum > 200000) {
-      tear = 'platinum';
-    } else if (Sum > 500000) {
+    late String tear = 'Unranked';
+
+    if (Sum < 30000) {
+      tear = 'Bronze';
+      Final = 30000;
+      Persent = 92.1;
+    } else if (Sum < 100000) {
+      tear = 'Silver';
+      Start = 30000;
+      Final = 100000;
+      Persent = 71.3;
+    } else if (Sum < 200000) {
+      tear = 'Gold';
+      Start = 100000;
+      Final = 200000;
+      Persent = 40.7;
+    } else if (Sum < 500000) {
+      tear = 'Platinum';
+      Start = 200000;
+      Final = 500000;
+      Persent = 10.7;
+    } else if (Sum < 1000000) {
       tear = 'Diamond';
-    } else if (Sum > 1000000) {
-      tear = 'master';
+      Start = 500000;
+      Final = 1000000;
+      Persent = 5.7;
+    } else {
+      tear = 'Master';
+      Start = 1000000;
+      Final = 1000000;
+      Persent = 1.7;
     }
-    return [Sum, tear];
+    return [Sum, tear, Start, Final, Persent];
   }
 
   @override
@@ -214,12 +239,14 @@ class _Home_4State extends State<Home_4> {
                                   return Lanking(
                                     name: snapshot.data!.name,
                                     group: snapshot.data!.group,
-                                    lank: '${snapshotpoint.data![1]} III 80%',
+                                    lank: snapshotpoint.data![1],
                                     point: 0,
                                     cost: snapshotpoint.data![0],
-                                    total: total,
+                                    end: snapshotpoint.data![3],
+                                    start: snapshotpoint.data![2],
                                     userID: widget.userID,
                                     donationList: widget.donationList,
+                                    persent: snapshotpoint.data![4],
                                   );
                                 }
                                 return Lanking(
@@ -228,9 +255,11 @@ class _Home_4State extends State<Home_4> {
                                   lank: '...',
                                   point: 0,
                                   cost: 1000,
-                                  total: 2000,
+                                  end: 2000,
+                                  start: 0,
                                   userID: widget.userID,
                                   donationList: widget.donationList,
+                                  persent: 0,
                                 );
                               });
                         }
@@ -240,9 +269,11 @@ class _Home_4State extends State<Home_4> {
                           lank: '...',
                           point: 0,
                           cost: 1000,
-                          total: 2000,
+                          end: 2000,
+                          start: 0,
                           userID: widget.userID,
                           donationList: widget.donationList,
+                          persent: 0,
                         );
                       })),
                   FutureBuilder(
@@ -261,7 +292,7 @@ class _Home_4State extends State<Home_4> {
                       });
                     },
                     child: const my_page_button(
-                      text: '기부등록',
+                      text: '등록하기',
                     ),
                   ),
                   GestureDetector(
@@ -271,7 +302,17 @@ class _Home_4State extends State<Home_4> {
                       });
                     },
                     child: const my_page_button(
-                      text: '기부내역',
+                      text: '등록 기부내역',
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        my_group_ = 3;
+                      });
+                    },
+                    child: const my_page_button(
+                      text: '인증된 기부내역',
                     ),
                   ),
                   GestureDetector(
@@ -329,22 +370,34 @@ class _Home_4State extends State<Home_4> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              my_group_ = 1;
-                            });
-                          },
-                          child: my_group_ == 1
-                              ? const Selected_button(button_text: '기부내역')
-                              : const None_Selected_button(button_text: '기부내역'),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
                               my_group_ = 2;
                             });
                           },
                           child: my_group_ == 2
-                              ? const Selected_button(button_text: '기부등록')
-                              : const None_Selected_button(button_text: '기부등록'),
+                              ? const Selected_button(button_text: '등록하기')
+                              : const None_Selected_button(button_text: '등록하기'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 1;
+                            });
+                          },
+                          child: my_group_ == 1
+                              ? const Selected_button(button_text: '등록 내역')
+                              : const None_Selected_button(
+                                  button_text: '등록 내역'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 3;
+                            });
+                          },
+                          child: my_group_ == 3
+                              ? const Selected_button(button_text: '인증 내역')
+                              : const None_Selected_button(
+                                  button_text: '인증 내역'),
                         ),
                       ],
                     ),
@@ -356,124 +409,213 @@ class _Home_4State extends State<Home_4> {
                           return Column(
                             children: [
                               for (var donation in donationSnapshot2.data!)
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        width: 1.0,
-                                        color: const Color(0xFFCCCCCC),
+                                if (donation.delete)
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          width: 1.0,
+                                          color: const Color(0xFFCCCCCC),
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Row(
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                  child: Image.network(
-                                                    'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
-                                                    width: 60,
-                                                    fit: BoxFit.fitWidth,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Row(
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                    child: Image.network(
+                                                      'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
+                                                      width: 60,
+                                                      fit: BoxFit.fitWidth,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 15,
-                                                ),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      donation.title,
-                                                      style: const TextStyle(
-                                                        fontSize: 17,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        const Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                            right: 5,
-                                                            top: 5,
-                                                          ),
-                                                          child: Icon(
-                                                            Icons.circle,
-                                                            size: 10,
-                                                            color: Color(
-                                                                0xFF007913),
-                                                          ),
+                                                  const SizedBox(
+                                                    width: 15,
+                                                  ),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 220,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              donation.title,
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 17,
+                                                                color: Colors
+                                                                    .black,
+                                                              ),
+                                                            ),
+                                                            ElevatedButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'donation_list')
+                                                                    .doc(donation
+                                                                        .number
+                                                                        .toString())
+                                                                    .set({
+                                                                  'detail':
+                                                                      donation
+                                                                          .detail,
+                                                                  'group':
+                                                                      donation
+                                                                          .group,
+                                                                  'money':
+                                                                      donation
+                                                                          .money,
+                                                                  'title':
+                                                                      donation
+                                                                          .title,
+                                                                  'time':
+                                                                      donation
+                                                                          .time,
+                                                                  'pass':
+                                                                      donation
+                                                                          .pass,
+                                                                  'delete':
+                                                                      false,
+                                                                  'user':
+                                                                      donation
+                                                                          .user,
+                                                                  'number':
+                                                                      donation
+                                                                          .number,
+                                                                });
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder: ((BuildContext context) => Home(
+                                                                        page: 3,
+                                                                        search_group:
+                                                                            0,
+                                                                        my_group:
+                                                                            1,
+                                                                        userID: widget
+                                                                            .userID,
+                                                                        donationList:
+                                                                            widget.donationList)),
+                                                                    fullscreenDialog:
+                                                                        true,
+                                                                  ),
+                                                                );
+                                                              },
+                                                              style:
+                                                                  ElevatedButton
+                                                                      .styleFrom(
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .blue, // Background color
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: const [
+                                                                  Text('삭제'),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        Text(
-                                                          donation.group,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 15,
-                                                            color: Color(
-                                                                0xFF464646),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          const Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              right: 5,
+                                                              top: 5,
+                                                            ),
+                                                            child: Icon(
+                                                              Icons.circle,
+                                                              size: 10,
+                                                              color: Color(
+                                                                  0xFF007913),
+                                                            ),
                                                           ),
+                                                          Text(
+                                                            donation.group,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 15,
+                                                              color: Color(
+                                                                  0xFF464646),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        '${donation.money}원',
+                                                        style: const TextStyle(
+                                                          fontSize: 13,
+                                                          color:
+                                                              Color(0xFF464646),
                                                         ),
-                                                      ],
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      '${donation.money}원',
-                                                      style: const TextStyle(
-                                                        fontSize: 13,
-                                                        color:
-                                                            Color(0xFF464646),
                                                       ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      '날짜:${donation.time.toDate()}',
-                                                      style: const TextStyle(
-                                                        fontSize: 10,
-                                                        color:
-                                                            Color(0xFF464646),
+                                                      const SizedBox(
+                                                        width: 5,
                                                       ),
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      '내용 : ${donation.detail}',
-                                                      style: const TextStyle(
-                                                        fontSize: 10,
-                                                        color:
-                                                            Color(0xFF464646),
+                                                      Text(
+                                                        '날짜:${donation.time.toDate()}',
+                                                        style: const TextStyle(
+                                                          fontSize: 10,
+                                                          color:
+                                                              Color(0xFF464646),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                      const SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Text(
+                                                        '내용 : ${donation.detail}',
+                                                        style: const TextStyle(
+                                                          fontSize: 10,
+                                                          color:
+                                                              Color(0xFF464646),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
                             ],
                           );
                         } else {
@@ -521,22 +663,34 @@ class _Home_4State extends State<Home_4> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              my_group_ = 1;
-                            });
-                          },
-                          child: my_group_ == 1
-                              ? const Selected_button(button_text: '기부내역')
-                              : const None_Selected_button(button_text: '기부내역'),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
                               my_group_ = 2;
                             });
                           },
                           child: my_group_ == 2
-                              ? const Selected_button(button_text: '기부등록')
-                              : const None_Selected_button(button_text: '기부등록'),
+                              ? const Selected_button(button_text: '등록하기')
+                              : const None_Selected_button(button_text: '등록하기'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 1;
+                            });
+                          },
+                          child: my_group_ == 1
+                              ? const Selected_button(button_text: '등록 내역')
+                              : const None_Selected_button(
+                                  button_text: '등록 내역'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 3;
+                            });
+                          },
+                          child: my_group_ == 3
+                              ? const Selected_button(button_text: '인증 내역')
+                              : const None_Selected_button(
+                                  button_text: '인증 내역'),
                         ),
                       ],
                     ),
@@ -757,7 +911,10 @@ class _Home_4State extends State<Home_4> {
                                               'title': title.text,
                                               'time': now,
                                               'pass': false,
+                                              'delete': true,
                                               'user': widget.userID,
+                                              'number':
+                                                  donationSnapshot.data?.number,
                                             });
                                             await FirebaseFirestore.instance
                                                 .collection('donation')
@@ -824,6 +981,222 @@ class _Home_4State extends State<Home_4> {
                               }));
                         }
                         return Container();
+                      })),
+                ],
+              )
+            : Container(),
+        my_group_ == 3
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((BuildContext context) => Home(
+                                page: 3,
+                                search_group: 1,
+                                userID: widget.userID,
+                                donationList: widget.donationList,
+                                my_group: 0,
+                              )),
+                          fullscreenDialog: true,
+                        ),
+                      );
+                    },
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      child: Text(
+                        '< 마이페이지',
+                        style:
+                            TextStyle(fontSize: 15, color: Color(0xFF3B3B3B)),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 2;
+                            });
+                          },
+                          child: my_group_ == 2
+                              ? const Selected_button(button_text: '등록하기')
+                              : const None_Selected_button(button_text: '등록하기'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 1;
+                            });
+                          },
+                          child: my_group_ == 1
+                              ? const Selected_button(button_text: '등록 내역')
+                              : const None_Selected_button(
+                                  button_text: '등록 내역'),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              my_group_ = 3;
+                            });
+                          },
+                          child: my_group_ == 3
+                              ? const Selected_button(button_text: '인증 내역')
+                              : const None_Selected_button(
+                                  button_text: '인증 내역'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  FutureBuilder(
+                      future: getDonationdata2,
+                      builder: ((context, donationSnapshot2) {
+                        if (donationSnapshot2.hasData) {
+                          return Column(
+                            children: [
+                              for (var donation in donationSnapshot2.data!)
+                                if (donation.delete)
+                                  if (donation.pass)
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                            width: 1.0,
+                                            color: const Color(0xFFCCCCCC),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Row(
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30),
+                                                      child: Image.network(
+                                                        'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
+                                                        width: 60,
+                                                        fit: BoxFit.fitWidth,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          donation.title,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 17,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .only(
+                                                                right: 5,
+                                                                top: 5,
+                                                              ),
+                                                              child: Icon(
+                                                                Icons.circle,
+                                                                size: 10,
+                                                                color: Color(
+                                                                    0xFF007913),
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              donation.group,
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 15,
+                                                                color: Color(
+                                                                    0xFF464646),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          '${donation.money}원',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 13,
+                                                            color: Color(
+                                                                0xFF464646),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          '날짜:${donation.time.toDate()}',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 10,
+                                                            color: Color(
+                                                                0xFF464646),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(
+                                                          '내용 : ${donation.detail}',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 10,
+                                                            color: Color(
+                                                                0xFF464646),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                            ],
+                          );
+                        } else {
+                          return Container();
+                        }
                       })),
                 ],
               )

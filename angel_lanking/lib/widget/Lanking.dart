@@ -7,8 +7,9 @@ class Lanking extends StatelessWidget {
   final String lank;
   final int point;
   final int cost;
-  final int total;
-
+  final int start;
+  final int end;
+  final double persent;
   final String userID;
   final List donationList;
 
@@ -19,7 +20,9 @@ class Lanking extends StatelessWidget {
     required this.lank,
     required this.point,
     required this.cost,
-    required this.total,
+    required this.start,
+    required this.end,
+    required this.persent,
     required this.userID,
     required this.donationList,
   });
@@ -86,12 +89,19 @@ class Lanking extends StatelessWidget {
                                 color: Color(0xFF007913),
                               ),
                             ),
-                            Text(
-                              group,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Color(0xFF464646),
-                              ),
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 3,
+                                ),
+                                Text(
+                                  group,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Color(0xFF464646),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -99,14 +109,14 @@ class Lanking extends StatelessWidget {
                           height: 15,
                         ),
                         Text(
-                          lank,
+                          '$lank  $persent%',
                           style: const TextStyle(
                             fontSize: 13,
                             color: Color(0xFF464646),
                           ),
                         ),
                         Text(
-                          '($cost/$total)',
+                          '($cost/$end)',
                           style: const TextStyle(
                             fontSize: 10,
                             color: Color(0xFFAEAEAE),
@@ -123,7 +133,7 @@ class Lanking extends StatelessWidget {
                             child: Row(
                               children: [
                                 Expanded(
-                                  flex: cost,
+                                  flex: (cost - start),
                                   child: Container(
                                     decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.only(
@@ -142,7 +152,7 @@ class Lanking extends StatelessWidget {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: (total - cost),
+                                  flex: (end - cost),
                                   child: Container(
                                     color: const Color(0xFFC8C8C8),
                                   ),
@@ -162,13 +172,6 @@ class Lanking extends StatelessWidget {
                             ),
                             const SizedBox(
                               width: 5,
-                            ),
-                            Text(
-                              '총 기부점수 :$point점',
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Color(0xFF464646),
-                              ),
                             ),
                           ],
                         ),

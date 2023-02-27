@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DonationModel2 {
   final String group, title, detail, user;
-  final int money;
+  final int money, number;
   final Timestamp time;
-  final bool pass;
+  final bool pass, delete;
 
   DonationModel2.fromJson(Map<String, dynamic>? json)
       : group = json!['group'],
@@ -13,5 +13,7 @@ class DonationModel2 {
         detail = json['detail'],
         time = json['time'],
         user = json['user'],
-        pass = json['pass'];
+        pass = json['pass'],
+        delete = json['delete'],
+        number = json['number'];
 }

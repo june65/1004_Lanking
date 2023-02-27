@@ -28,21 +28,57 @@ class Home_1 extends StatefulWidget {
 
 class _Home_1State extends State<Home_1> {
   late Future<UserModel>? usermodel;
-  late Future<int>? donationpoint;
   late Future<List<DonationModel>> getDonationdata;
+  late Future<List<dynamic>>? donationpoint;
 
-  int total = 100000000;
-
-  static Future<int> getDonationPointdata(
-      List<DonationModel2> DonationGroupList) async {
+  static Future<List<dynamic>> getDonationPointdata(
+      List<DonationModel2> DonationPointList) async {
+    late int Start = 0;
+    late int Final = 0;
     late int Sum = 0;
+    late double Persent = 0.0;
 
-    for (int i = 0; i < DonationGroupList.length; i++) {
-      if (DonationGroupList[i].pass) {
-        Sum += DonationGroupList[i].money;
+    for (int i = 0; i < DonationPointList.length; i++) {
+      if (DonationPointList[i].delete) {
+        if (DonationPointList[i].pass) {
+          Sum += DonationPointList[i].money;
+        }
       }
     }
-    return Sum;
+
+    late String tear = 'unranked';
+
+    if (Sum < 30000) {
+      tear = 'Bronze';
+      Final = 30000;
+      Persent = 92.1;
+    } else if (Sum < 100000) {
+      tear = 'Silver';
+      Start = 30000;
+      Final = 100000;
+      Persent = 71.3;
+    } else if (Sum < 200000) {
+      tear = 'Gold';
+      Start = 100000;
+      Final = 200000;
+      Persent = 40.7;
+    } else if (Sum < 500000) {
+      tear = 'Platinum';
+      Start = 200000;
+      Final = 500000;
+      Persent = 10.7;
+    } else if (Sum < 1000000) {
+      tear = 'Diamond';
+      Start = 500000;
+      Final = 1000000;
+      Persent = 5.7;
+    } else {
+      tear = 'Master';
+      Start = 1000000;
+      Final = 1000000;
+      Persent = 1.7;
+    }
+    return [Sum, tear, Start, Final, Persent];
   }
 
   @override
@@ -68,12 +104,14 @@ class _Home_1State extends State<Home_1> {
                         return Lanking(
                           name: snapshot.data!.name,
                           group: snapshot.data!.group,
-                          lank: '실버 III 80%',
+                          lank: snapshotpoint.data![1],
                           point: 0,
-                          cost: snapshotpoint.data!,
-                          total: total,
+                          cost: snapshotpoint.data![0],
+                          end: snapshotpoint.data![3],
+                          start: snapshotpoint.data![2],
                           userID: widget.userID,
                           donationList: widget.donationList,
+                          persent: snapshotpoint.data![4],
                         );
                       }
                       return Lanking(
@@ -82,9 +120,11 @@ class _Home_1State extends State<Home_1> {
                         lank: '...',
                         point: 0,
                         cost: 1000,
-                        total: 2000,
+                        end: 2000,
+                        start: 0,
                         userID: widget.userID,
                         donationList: widget.donationList,
+                        persent: 0,
                       );
                     });
               }
@@ -94,9 +134,11 @@ class _Home_1State extends State<Home_1> {
                 lank: '...',
                 point: 0,
                 cost: 1000,
-                total: 2000,
+                end: 2000,
+                start: 0,
                 userID: widget.userID,
                 donationList: widget.donationList,
+                persent: 0,
               );
             })),
         const Banners(
