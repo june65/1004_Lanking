@@ -1,4 +1,6 @@
+import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/screen/Home.dart';
+import 'package:angel_lanking/screen/Tier_image.dart';
 import 'package:flutter/material.dart';
 
 class Lanking extends StatelessWidget {
@@ -12,6 +14,8 @@ class Lanking extends StatelessWidget {
   final double persent;
   final String userID;
   final List donationList;
+  final int my_group;
+  final List<DonationModel2> getDonationdata;
 
   const Lanking({
     super.key,
@@ -25,6 +29,8 @@ class Lanking extends StatelessWidget {
     required this.persent,
     required this.userID,
     required this.donationList,
+    required this.my_group,
+    required this.getDonationdata,
   });
 
   @override
@@ -51,135 +57,153 @@ class Lanking extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.network(
-                    'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                    width: 100,
-                    fit: BoxFit.fitWidth,
+            GestureDetector(
+              onTap: () {
+                if (lank != '...') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((BuildContext context) => Tier_image(
+                          userID: userID,
+                          tier: lank,
+                          donationList: donationList,
+                          my_group: my_group,
+                          getDonationdata: getDonationdata)),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                }
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.network(
+                      'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
+                      width: 100,
+                      fit: BoxFit.fitWidth,
+                    ),
                   ),
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(
-                                right: 5,
-                                top: 5,
-                              ),
-                              child: Icon(
-                                Icons.circle,
-                                size: 10,
-                                color: Color(0xFF007913),
-                              ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              color: Colors.black,
                             ),
-                            Column(
-                              children: [
-                                const SizedBox(
-                                  height: 3,
+                          ),
+                          Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(
+                                  right: 5,
+                                  top: 5,
                                 ),
-                                Text(
-                                  group,
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: Color(0xFF464646),
+                                child: Icon(
+                                  Icons.circle,
+                                  size: 10,
+                                  color: Color(0xFF007913),
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 3,
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    group,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: Color(0xFF464646),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            '$lank  $persent%',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF464646),
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          '$lank  $persent%',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFF464646),
                           ),
-                        ),
-                        Text(
-                          '($cost/$end)',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: Color(0xFFAEAEAE),
+                          Text(
+                            '($cost/$end)',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Color(0xFFAEAEAE),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                          ),
-                          child: Container(
-                            height: 10,
-                            width: double.infinity,
-                            color: const Color(0xFFC8C8C8),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: (cost - start),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(10),
-                                        bottomRight: Radius.circular(10),
-                                      ),
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topRight,
-                                        end: Alignment.bottomLeft,
-                                        colors: [
-                                          Color(0xFF4A4A4A),
-                                          Color(0xFFA4A4A4),
-                                        ],
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                            ),
+                            child: Container(
+                              height: 10,
+                              width: double.infinity,
+                              color: const Color(0xFFC8C8C8),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: (cost - start),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(10),
+                                          bottomRight: Radius.circular(10),
+                                        ),
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topRight,
+                                          end: Alignment.bottomLeft,
+                                          colors: [
+                                            Color(0xFF4A4A4A),
+                                            Color(0xFFA4A4A4),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: (end - cost),
-                                  child: Container(
-                                    color: const Color(0xFFC8C8C8),
+                                  Expanded(
+                                    flex: (end - cost),
+                                    child: Container(
+                                      color: const Color(0xFFC8C8C8),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '총 기부금 : $cost원',
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Color(0xFF464646),
+                                ],
                               ),
                             ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                '총 기부금 : $cost원',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Color(0xFF464646),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: () {

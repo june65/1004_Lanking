@@ -112,6 +112,8 @@ class _Home_1State extends State<Home_1> {
                           userID: widget.userID,
                           donationList: widget.donationList,
                           persent: snapshotpoint.data![4],
+                          getDonationdata: widget.getDonationdata,
+                          my_group: widget.my_group,
                         );
                       }
                       return Lanking(
@@ -125,6 +127,8 @@ class _Home_1State extends State<Home_1> {
                         userID: widget.userID,
                         donationList: widget.donationList,
                         persent: 0,
+                        getDonationdata: widget.getDonationdata,
+                        my_group: widget.my_group,
                       );
                     });
               }
@@ -139,6 +143,8 @@ class _Home_1State extends State<Home_1> {
                 userID: widget.userID,
                 donationList: widget.donationList,
                 persent: 0,
+                getDonationdata: widget.getDonationdata,
+                my_group: widget.my_group,
               );
             })),
         const Banners(
