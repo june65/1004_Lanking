@@ -11,10 +11,12 @@ import 'package:angel_lanking/widget/Graph.dart';
 import 'package:angel_lanking/widget/Lanking.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class Home_4 extends StatefulWidget {
   final String userID;
@@ -49,11 +51,14 @@ class _Home_4State extends State<Home_4> {
   List<String> dropdownList = ['child', 'old', 'world'];
   String selectedDropdown = 'child';
   int my_group_ = 0;
+  bool loading = true;
 
   XFile? image;
+  String imageUrl = '';
+
   final ImagePicker picker = ImagePicker();
   Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
+    XFile? img = await picker.pickImage(source: media);
 
     setState(() {
       image = img;
@@ -128,6 +133,11 @@ class _Home_4State extends State<Home_4> {
             ),
           );
         });
+  }
+
+  Future<int> _uploadToSignedURL({required file, required String url}) async {
+    http.Response response = await http.put(Uri.parse(url), body: file.bytes);
+    return response.statusCode;
   }
 
   @override
@@ -442,11 +452,20 @@ class _Home_4State extends State<Home_4> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             30),
-                                                    child: Image.network(
-                                                      'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
-                                                      width: 60,
-                                                      fit: BoxFit.fitWidth,
-                                                    ),
+                                                    child: donation.image == ''
+                                                        ? Image.network(
+                                                            'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
+                                                            width: 60,
+                                                            fit:
+                                                                BoxFit.fitWidth,
+                                                          )
+                                                        : Image.network(
+                                                            donation.image,
+                                                            width: 60,
+                                                            height: 60,
+                                                            fit:
+                                                                BoxFit.fitWidth,
+                                                          ),
                                                   ),
                                                   const SizedBox(
                                                     width: 15,
@@ -885,62 +904,98 @@ class _Home_4State extends State<Home_4> {
                       ),
                     ),
                   ),
-                  FutureBuilder(
-                      future: usermodel,
-                      builder: ((context, snapshot) {
-                        if (snapshot.hasData) {
-                          return FutureBuilder(
-                              future: donationnumber,
-                              builder: ((context, donationSnapshot) {
-                                if (donationSnapshot.hasData) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20.0, right: 20, bottom: 20),
-                                    child: GestureDetector(
-                                        onTap: () async {
-                                          newdonationList.add(donationSnapshot
-                                              .data!.number
-                                              .toString());
-                                          if (title.text.isNotEmpty &&
-                                              detail.text.isNotEmpty &&
-                                              image_exist != 0 &&
-                                              money.text.isNotEmpty) {
-                                            await FirebaseFirestore.instance
-                                                .collection('donation_list')
-                                                .doc(donationSnapshot
-                                                    .data?.number
-                                                    .toString())
-                                                .set({
-                                              'detail': detail.text,
-                                              'group': selectedDropdown,
-                                              'money': int.parse(money.text),
-                                              'title': title.text,
-                                              'time': now,
-                                              'pass': false,
-                                              'delete': true,
-                                              'user': widget.userID,
-                                              'number':
-                                                  donationSnapshot.data?.number,
-                                            });
-                                            await FirebaseFirestore.instance
-                                                .collection('donation')
-                                                .doc('number')
-                                                .set({
-                                              'number': donationSnapshot
-                                                      .data!.number +
-                                                  1,
-                                            });
-                                            await FirebaseFirestore.instance
-                                                .collection('user')
-                                                .doc(widget.userID)
-                                                .set({
-                                              'name': snapshot.data!.name,
-                                              'donation': newdonationList,
-                                              'instagram':
-                                                  snapshot.data!.instagram,
-                                              'group': snapshot.data!.group
-                                            });
-                                            /*
+                  loading
+                      ? FutureBuilder(
+                          future: usermodel,
+                          builder: ((context, snapshot) {
+                            if (snapshot.hasData) {
+                              return FutureBuilder(
+                                  future: donationnumber,
+                                  builder: ((context, donationSnapshot) {
+                                    if (donationSnapshot.hasData) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20.0, right: 20, bottom: 20),
+                                        child: GestureDetector(
+                                            onTap: () async {
+                                              setState(() {
+                                                loading = false;
+                                              });
+                                              if (image != null) {
+                                                String uniqueFileName =
+                                                    DateTime.now()
+                                                        .millisecondsSinceEpoch
+                                                        .toString();
+
+                                                Reference referenceRoot =
+                                                    FirebaseStorage.instance
+                                                        .ref();
+
+                                                Reference referenceDireImages =
+                                                    referenceRoot
+                                                        .child('images');
+
+                                                Reference
+                                                    referenceImageToUpload =
+                                                    referenceDireImages
+                                                        .child(uniqueFileName);
+
+                                                try {
+                                                  await referenceImageToUpload
+                                                      .putFile(
+                                                          File(image!.path));
+
+                                                  imageUrl =
+                                                      await referenceImageToUpload
+                                                          .getDownloadURL();
+                                                } catch (error) {}
+                                              }
+                                              newdonationList.add(
+                                                  donationSnapshot.data!.number
+                                                      .toString());
+                                              if (title.text.isNotEmpty &&
+                                                  detail.text.isNotEmpty &&
+                                                  image_exist != 0 &&
+                                                  money.text.isNotEmpty) {
+                                                await FirebaseFirestore.instance
+                                                    .collection('donation_list')
+                                                    .doc(donationSnapshot
+                                                        .data?.number
+                                                        .toString())
+                                                    .set({
+                                                  'detail': detail.text,
+                                                  'group': selectedDropdown,
+                                                  'money':
+                                                      int.parse(money.text),
+                                                  'title': title.text,
+                                                  'time': now,
+                                                  'pass': false,
+                                                  'delete': true,
+                                                  'user': widget.userID,
+                                                  'image': imageUrl,
+                                                  'number': donationSnapshot
+                                                      .data?.number,
+                                                });
+                                                await FirebaseFirestore.instance
+                                                    .collection('donation')
+                                                    .doc('number')
+                                                    .set({
+                                                  'number': donationSnapshot
+                                                          .data!.number +
+                                                      1,
+                                                });
+                                                await FirebaseFirestore.instance
+                                                    .collection('user')
+                                                    .doc(widget.userID)
+                                                    .set({
+                                                  'name': snapshot.data!.name,
+                                                  'donation': newdonationList,
+                                                  'instagram':
+                                                      snapshot.data!.instagram,
+                                                  'group': snapshot.data!.group
+                                                });
+
+                                                /*
                                             await FirebaseFirestore.instance
                                                 .collection('group')
                                                 .doc(snapshot.data!.group)
@@ -948,12 +1003,14 @@ class _Home_4State extends State<Home_4> {
                                               'donation': ['1', '2', '4'],
                                             });
                                             */
-
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder:
-                                                    ((BuildContext context) =>
+                                                _uploadToSignedURL(
+                                                    file: image,
+                                                    url: "url-you-have");
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: ((BuildContext
+                                                            context) =>
                                                         Home(
                                                           page: 0,
                                                           search_group: 1,
@@ -962,32 +1019,42 @@ class _Home_4State extends State<Home_4> {
                                                               newdonationList,
                                                           my_group: 0,
                                                         )),
-                                                fullscreenDialog: true,
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: Button(
-                                          text: '등록하기',
-                                          iconshape: Icons
-                                              .check_circle_outline_outlined,
-                                          backgroundcolor: button_color,
-                                          textcolor: Colors.white,
-                                        )),
-                                  );
-                                } else {
-                                  return Button(
-                                    text: '등록하기',
-                                    iconshape:
-                                        Icons.check_circle_outline_outlined,
-                                    backgroundcolor: button_color,
-                                    textcolor: Colors.white,
-                                  );
-                                }
-                              }));
-                        }
-                        return Container();
-                      })),
+                                                    fullscreenDialog: true,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            child: Button(
+                                              text: '등록하기',
+                                              iconshape: Icons
+                                                  .check_circle_outline_outlined,
+                                              backgroundcolor: button_color,
+                                              textcolor: Colors.white,
+                                            )),
+                                      );
+                                    } else {
+                                      return Button(
+                                        text: '등록하기',
+                                        iconshape:
+                                            Icons.check_circle_outline_outlined,
+                                        backgroundcolor: button_color,
+                                        textcolor: Colors.white,
+                                      );
+                                    }
+                                  }));
+                            }
+                            return Container();
+                          }))
+                      : Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20, bottom: 20),
+                          child: Button(
+                            text: '로딩중',
+                            iconshape: Icons.downloading_sharp,
+                            backgroundcolor: button_color,
+                            textcolor: Colors.white,
+                          ),
+                        ),
                 ],
               )
             : Container(),
@@ -1097,11 +1164,28 @@ class _Home_4State extends State<Home_4> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               30),
-                                                      child: Image.network(
-                                                        'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
-                                                        width: 60,
-                                                        fit: BoxFit.fitWidth,
-                                                      ),
+                                                      child: donation.image ==
+                                                              ''
+                                                          ? Image.network(
+                                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/finder_logo.png',
+                                                              width: 60,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                            )
+                                                          : Image.network(
+                                                              donation.image,
+                                                              width: 60,
+                                                              height: 60,
+                                                              fit: BoxFit
+                                                                  .fitWidth,
+                                                            ),
+
+                                                      /*Image.network(
+                                                                  '',
+                                                                  width: 60,
+                                                                  fit: BoxFit
+                                                                      .fitWidth,
+                                                                ),*/
                                                     ),
                                                     const SizedBox(
                                                       width: 15,

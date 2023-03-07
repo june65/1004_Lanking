@@ -5,7 +5,7 @@ class DonationModel2 {
   final int money, number;
   final Timestamp time;
   final bool pass, delete;
-
+  final String image;
   DonationModel2.fromJson(Map<String, dynamic>? json)
       : group = json!['group'],
         money = json['money'],
@@ -15,5 +15,6 @@ class DonationModel2 {
         user = json['user'],
         pass = json['pass'],
         delete = json['delete'],
-        number = json['number'];
+        number = json['number'],
+        image = json['image'];
 }
