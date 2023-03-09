@@ -77,7 +77,7 @@ class _Profile_innerState extends State<Profile_inner> {
                       borderRadius: BorderRadius.circular(30),
                       child: Image.network(
                         widget.image,
-                        width: 60,
+                        width: 100,
                         fit: BoxFit.fitWidth,
                       ),
                     ),
@@ -89,7 +89,7 @@ class _Profile_innerState extends State<Profile_inner> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '1. ${widget.name}',
+                          widget.name,
                           style: const TextStyle(
                             fontSize: 17,
                             color: Colors.black,

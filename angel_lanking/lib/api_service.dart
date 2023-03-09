@@ -110,7 +110,7 @@ class ApiService {
           .collection('group')
           .doc(grouplankinglist[i])
           .get();
-      print(result2.data());
+
       final instance = GroupUserModel.fromJson(result2.data());
       DonationInstances2.add(instance);
     }
