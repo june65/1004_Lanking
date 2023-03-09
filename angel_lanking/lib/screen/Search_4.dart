@@ -1,4 +1,3 @@
-import 'package:angel_lanking/widget/Profile.dart';
 import 'package:flutter/material.dart';
 
 class Search_4 extends StatelessWidget {
@@ -23,11 +22,6 @@ class Search_4 extends StatelessWidget {
             ),
           ),
         ),
-        Profile(),
-        Profile(),
-        Profile(),
-        Profile(),
-        Profile(),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/model/donation_type.dart';
+import 'package:angel_lanking/model/grouplanking.dart';
 import 'package:angel_lanking/model/groupuser.dart';
 import 'package:angel_lanking/model/number.dart';
 import 'package:angel_lanking/model/user.dart';
@@ -88,5 +89,31 @@ class ApiService {
         await FirebaseFirestore.instance.collection('group').doc(Groupid).get();
 
     return GroupUserModel.fromJson(result.data());
+  }
+
+  static Future<GroupLankingModel> getGroupLanking() async {
+    var result = await FirebaseFirestore.instance
+        .collection('lanking')
+        .doc('group')
+        .get();
+
+    return GroupLankingModel.fromJson(result.data());
+  }
+
+  static Future<List<GroupUserModel>> getGroupList() async {
+    var grouplankinglist = ['GIST', 'KAIST'];
+
+    List<GroupUserModel> DonationInstances2 = [];
+
+    for (int i = 0; i < grouplankinglist.length; i++) {
+      var result2 = await FirebaseFirestore.instance
+          .collection('group')
+          .doc(grouplankinglist[i])
+          .get();
+      print(result2.data());
+      final instance = GroupUserModel.fromJson(result2.data());
+      DonationInstances2.add(instance);
+    }
+    return DonationInstances2;
   }
 }

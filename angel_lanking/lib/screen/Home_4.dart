@@ -907,157 +907,207 @@ class _Home_4State extends State<Home_4> {
                   ),
                   loading
                       ? FutureBuilder(
-                          future: usermodel,
-                          builder: ((context, snapshot) {
-                            if (snapshot.hasData) {
+                          future: groupusermodel,
+                          builder: (context, groupsnapshot) {
+                            if (groupsnapshot.hasData) {
                               return FutureBuilder(
-                                  future: donationnumber,
-                                  builder: ((context, donationSnapshot) {
-                                    if (donationSnapshot.hasData) {
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20.0, right: 20, bottom: 20),
-                                        child: GestureDetector(
-                                            onTap: () async {
-                                              if (title.text.isNotEmpty &&
-                                                  detail.text.isNotEmpty &&
-                                                  image_exist != 0 &&
-                                                  money.text.isNotEmpty) {
-                                                setState(() {
-                                                  loading = false;
-                                                });
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: ((BuildContext
-                                                            context) =>
-                                                        Home(
-                                                          page: 0,
-                                                          search_group: 1,
-                                                          userID: widget.userID,
-                                                          donationList:
+                                  future: usermodel,
+                                  builder: ((context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return FutureBuilder(
+                                          future: donationnumber,
+                                          builder:
+                                              ((context, donationSnapshot) {
+                                            if (donationSnapshot.hasData) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20.0,
+                                                    right: 20,
+                                                    bottom: 20),
+                                                child: GestureDetector(
+                                                    onTap: () async {
+                                                      if (title
+                                                              .text.isNotEmpty &&
+                                                          detail.text
+                                                              .isNotEmpty &&
+                                                          image_exist != 0 &&
+                                                          money.text
+                                                              .isNotEmpty) {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: ((BuildContext
+                                                                    context) =>
+                                                                Home(
+                                                                  page: 0,
+                                                                  search_group:
+                                                                      1,
+                                                                  userID: widget
+                                                                      .userID,
+                                                                  donationList:
+                                                                      newdonationList,
+                                                                  my_group: 0,
+                                                                  user_group: widget
+                                                                      .user_group,
+                                                                )),
+                                                            fullscreenDialog:
+                                                                true,
+                                                          ),
+                                                        );
+
+                                                        if (image != null) {
+                                                          String
+                                                              uniqueFileName =
+                                                              DateTime.now()
+                                                                  .millisecondsSinceEpoch
+                                                                  .toString();
+
+                                                          Reference
+                                                              referenceRoot =
+                                                              FirebaseStorage
+                                                                  .instance
+                                                                  .ref();
+
+                                                          Reference
+                                                              referenceDireImages =
+                                                              referenceRoot
+                                                                  .child(
+                                                                      'images');
+
+                                                          Reference
+                                                              referenceImageToUpload =
+                                                              referenceDireImages
+                                                                  .child(
+                                                                      uniqueFileName);
+
+                                                          try {
+                                                            await referenceImageToUpload
+                                                                .putFile(File(
+                                                                    image!
+                                                                        .path));
+
+                                                            imageUrl =
+                                                                await referenceImageToUpload
+                                                                    .getDownloadURL();
+                                                          } catch (error) {}
+                                                        }
+                                                        newdonationList.add(
+                                                            donationSnapshot
+                                                                .data!.number
+                                                                .toString());
+
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'donation_list')
+                                                            .doc(
+                                                                donationSnapshot
+                                                                    .data
+                                                                    ?.number
+                                                                    .toString())
+                                                            .set({
+                                                          'detail': detail.text,
+                                                          'group':
+                                                              selectedDropdown,
+                                                          'money': int.parse(
+                                                              money.text),
+                                                          'title': title.text,
+                                                          'time': now,
+                                                          'pass': false,
+                                                          'delete': true,
+                                                          'user': widget.userID,
+                                                          'image': imageUrl,
+                                                          'number':
+                                                              donationSnapshot
+                                                                  .data?.number,
+                                                        });
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection(
+                                                                'donation')
+                                                            .doc('number')
+                                                            .set({
+                                                          'number':
+                                                              donationSnapshot
+                                                                      .data!
+                                                                      .number +
+                                                                  1,
+                                                        });
+
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('user')
+                                                            .doc(widget.userID)
+                                                            .set({
+                                                          'name': snapshot
+                                                              .data!.name,
+                                                          'donation':
                                                               newdonationList,
-                                                          my_group: 0,
-                                                          user_group:
-                                                              widget.user_group,
-                                                        )),
-                                                    fullscreenDialog: true,
-                                                  ),
-                                                );
+                                                          'instagram': snapshot
+                                                              .data!.instagram,
+                                                          'group': snapshot
+                                                              .data!.group
+                                                        });
 
-                                                if (image != null) {
-                                                  String uniqueFileName =
-                                                      DateTime.now()
-                                                          .millisecondsSinceEpoch
-                                                          .toString();
+                                                        List
+                                                            newgroupdonationlist =
+                                                            groupsnapshot
+                                                                .data!.donation;
 
-                                                  Reference referenceRoot =
-                                                      FirebaseStorage.instance
-                                                          .ref();
+                                                        newgroupdonationlist.add(
+                                                            donationSnapshot
+                                                                .data!.number
+                                                                .toString());
 
-                                                  Reference
-                                                      referenceDireImages =
-                                                      referenceRoot
-                                                          .child('images');
+                                                        await FirebaseFirestore
+                                                            .instance
+                                                            .collection('group')
+                                                            .doc(widget
+                                                                .user_group)
+                                                            .update({
+                                                          'donation':
+                                                              newgroupdonationlist,
+                                                        });
 
-                                                  Reference
-                                                      referenceImageToUpload =
-                                                      referenceDireImages.child(
-                                                          uniqueFileName);
-
-                                                  try {
-                                                    await referenceImageToUpload
-                                                        .putFile(
-                                                            File(image!.path));
-
-                                                    imageUrl =
-                                                        await referenceImageToUpload
-                                                            .getDownloadURL();
-                                                  } catch (error) {}
-                                                }
-                                                newdonationList.add(
-                                                    donationSnapshot
-                                                        .data!.number
-                                                        .toString());
-
-                                                await FirebaseFirestore.instance
-                                                    .collection('donation_list')
-                                                    .doc(donationSnapshot
-                                                        .data?.number
-                                                        .toString())
-                                                    .set({
-                                                  'detail': detail.text,
-                                                  'group': selectedDropdown,
-                                                  'money':
-                                                      int.parse(money.text),
-                                                  'title': title.text,
-                                                  'time': now,
-                                                  'pass': false,
-                                                  'delete': true,
-                                                  'user': widget.userID,
-                                                  'image': imageUrl,
-                                                  'number': donationSnapshot
-                                                      .data?.number,
-                                                });
-                                                await FirebaseFirestore.instance
-                                                    .collection('donation')
-                                                    .doc('number')
-                                                    .set({
-                                                  'number': donationSnapshot
-                                                          .data!.number +
-                                                      1,
-                                                });
-
-                                                await FirebaseFirestore.instance
-                                                    .collection('user')
-                                                    .doc(widget.userID)
-                                                    .set({
-                                                  'name': snapshot.data!.name,
-                                                  'donation': newdonationList,
-                                                  'instagram':
-                                                      snapshot.data!.instagram,
-                                                  'group': snapshot.data!.group
-                                                });
-
-                                                await FirebaseFirestore.instance
-                                                    .collection('group')
-                                                    .doc(widget.user_group)
-                                                    .update({
-                                                  'donation':
-                                                      snapshot.data!.donation
-                                                });
-
-                                                /*
-                                                await FirebaseFirestore.instance
-                                                    .collection('group')
-                                                    .doc(snapshot.data!.group)
-                                                    .set({
-                                                  'donation': ['1', '2', '4'],
-                                                });
-                                                */
-                                              }
-                                            },
-                                            child: Button(
-                                              text: '등록하기',
-                                              iconshape: Icons
-                                                  .check_circle_outline_outlined,
-                                              backgroundcolor: button_color,
-                                              textcolor: Colors.white,
-                                            )),
-                                      );
-                                    } else {
-                                      return Button(
-                                        text: '등록하기',
-                                        iconshape:
-                                            Icons.check_circle_outline_outlined,
-                                        backgroundcolor: button_color,
-                                        textcolor: Colors.white,
-                                      );
+                                                        /*
+                                                    await FirebaseFirestore.instance
+                                                        .collection('group')
+                                                        .doc(snapshot.data!.group)
+                                                        .set({
+                                                      'donation': ['1', '2', '4'],
+                                                    });
+                                                    */
+                                                      }
+                                                    },
+                                                    child: Button(
+                                                      text: '등록하기',
+                                                      iconshape: Icons
+                                                          .check_circle_outline_outlined,
+                                                      backgroundcolor:
+                                                          button_color,
+                                                      textcolor: Colors.white,
+                                                    )),
+                                              );
+                                            } else {
+                                              return Button(
+                                                text: '등록하기',
+                                                iconshape: Icons
+                                                    .check_circle_outline_outlined,
+                                                backgroundcolor: button_color,
+                                                textcolor: Colors.white,
+                                              );
+                                            }
+                                          }));
                                     }
+                                    return Container();
                                   }));
+                            } else {
+                              return Container();
                             }
-                            return Container();
-                          }))
+                          })
                       : Padding(
                           padding: const EdgeInsets.only(
                               left: 20.0, right: 20, bottom: 20),
