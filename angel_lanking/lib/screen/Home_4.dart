@@ -1018,22 +1018,16 @@ class _Home_4State extends State<Home_4> {
                                                       snapshot.data!.instagram,
                                                   'group': snapshot.data!.group
                                                 });
-                                                print('a');
-                                                /*
-                                                List newgroupdonationlist =
-                                                    snapshot.data!.donation;
-                                                
-                                                newgroupdonationlist
-                                                    .add(widget.userID);
 
                                                 await FirebaseFirestore.instance
                                                     .collection('group')
-                                                    .doc(widget.group_save)
+                                                    .doc(widget.user_group)
                                                     .update({
-                                                  'user': newgroupuserlist
+                                                  'donation':
+                                                      snapshot.data!.donation
                                                 });
 
-                                                    
+                                                /*
                                                 await FirebaseFirestore.instance
                                                     .collection('group')
                                                     .doc(snapshot.data!.group)
