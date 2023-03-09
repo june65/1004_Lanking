@@ -87,6 +87,7 @@ class _AppState extends State<App> {
                                 userID: userID,
                                 donationList: userSnapshot.data!.donation,
                                 my_group: 0,
+                                user_group: userSnapshot.data!.group,
                               );
                             } else {
                               return Container();

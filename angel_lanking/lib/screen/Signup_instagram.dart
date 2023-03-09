@@ -1,3 +1,5 @@
+import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/groupuser.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Signup_group.dart';
 import 'package:angel_lanking/widget/Button.dart';
@@ -23,7 +25,7 @@ class Signup_instagram extends StatefulWidget {
 
 class _Signup_instagramState extends State<Signup_instagram> {
   late SharedPreferences prefs;
-
+  late Future<GroupUserModel>? groupusermodel;
   late String user_id;
   late String group;
 
@@ -32,6 +34,7 @@ class _Signup_instagramState extends State<Signup_instagram> {
     super.initState();
     user_id = widget.user_id_save;
     group = widget.group_save;
+    groupusermodel = ApiService.getGroupUser(widget.group_save);
   }
   /*
   Future save_user_id() async {
@@ -221,41 +224,62 @@ class _Signup_instagramState extends State<Signup_instagram> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 true
-                    ? GestureDetector(
-                        onTap: () async {
-                          if (instagram_id.text.length >= 4 &&
-                              instagram_id.text.replaceAll(RegExp(' '), "") ==
-                                  instagram_id.text) {
-                            await FirebaseFirestore.instance
-                                .collection('user')
-                                .doc(widget.userID)
-                                .set({
-                              'name': widget.user_id_save,
-                              'donation': [],
-                              'instagram': instagram_id.text,
-                              'group': widget.group_save
-                            });
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: ((BuildContext context) => Home(
-                                      page: 0,
-                                      search_group: 1,
-                                      userID: widget.userID,
-                                      donationList: const [''],
-                                      my_group: 0,
-                                    )),
-                                fullscreenDialog: true,
-                              ),
-                            );
-                          }
-                        },
-                        child: Button(
-                          text: 'NEXT',
-                          iconshape: Icons.check_circle_outline_outlined,
-                          backgroundcolor: button_color,
-                          textcolor: Colors.white,
-                        ))
+                    ? FutureBuilder(
+                        future: groupusermodel,
+                        builder: (context, snapshot) {
+                          return snapshot.hasData
+                              ? GestureDetector(
+                                  onTap: () async {
+                                    if (instagram_id.text.length >= 4 &&
+                                        instagram_id.text
+                                                .replaceAll(RegExp(' '), "") ==
+                                            instagram_id.text) {
+                                      await FirebaseFirestore.instance
+                                          .collection('user')
+                                          .doc(widget.userID)
+                                          .set({
+                                        'name': widget.user_id_save,
+                                        'donation': [],
+                                        'instagram': instagram_id.text,
+                                        'group': widget.group_save
+                                      });
+
+                                      List newgroupuserlist =
+                                          snapshot.data!.user;
+
+                                      newgroupuserlist.add(widget.userID);
+
+                                      await FirebaseFirestore.instance
+                                          .collection('group')
+                                          .doc(widget.group_save)
+                                          .update({'user': newgroupuserlist});
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: ((BuildContext context) =>
+                                              Home(
+                                                page: 0,
+                                                search_group: 1,
+                                                userID: widget.userID,
+                                                donationList: const [''],
+                                                my_group: 0,
+                                                user_group: widget.group_save,
+                                              )),
+                                          fullscreenDialog: true,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Button(
+                                    text: 'NEXT',
+                                    iconshape:
+                                        Icons.check_circle_outline_outlined,
+                                    backgroundcolor: button_color,
+                                    textcolor: Colors.white,
+                                  ))
+                              : Container();
+                        })
                     : const SizedBox(
                         height: 0,
                       ),

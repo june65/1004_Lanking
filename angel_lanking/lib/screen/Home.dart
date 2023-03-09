@@ -11,6 +11,7 @@ class Home extends StatefulWidget {
   final int page;
   final int search_group;
   final int my_group;
+  final String user_group;
   final String userID;
   final List donationList;
 
@@ -21,6 +22,7 @@ class Home extends StatefulWidget {
     required this.my_group,
     required this.userID,
     required this.donationList,
+    required this.user_group,
   });
 
   @override
@@ -185,6 +187,7 @@ class _HomeState extends State<Home> {
                                 donationList: widget.donationList,
                                 getDonationdata: snapshot.data!,
                                 my_group: 0,
+                                user_group: widget.user_group,
                               );
                             }
                             return Container();
@@ -212,6 +215,7 @@ class _HomeState extends State<Home> {
                                 donationList: widget.donationList,
                                 getDonationdata: snapshot.data!,
                                 my_group: widget.my_group,
+                                user_group: widget.user_group,
                               );
                             }
                             return Container();

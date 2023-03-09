@@ -1,6 +1,7 @@
 import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/model/donation_type.dart';
+import 'package:angel_lanking/model/groupuser.dart';
 import 'package:angel_lanking/model/number.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,11 +77,16 @@ class ApiService {
           .collection('donation_list')
           .doc(userDonationList[i])
           .get();
-
       final instance = DonationModel2.fromJson(result.data());
       DonationInstances2.add(instance);
     }
-
     return DonationInstances2;
+  }
+
+  static Future<GroupUserModel> getGroupUser(String Groupid) async {
+    var result =
+        await FirebaseFirestore.instance.collection('group').doc(Groupid).get();
+
+    return GroupUserModel.fromJson(result.data());
   }
 }

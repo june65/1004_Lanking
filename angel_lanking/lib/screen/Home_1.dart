@@ -1,5 +1,4 @@
 import 'package:angel_lanking/api_service.dart';
-import 'package:angel_lanking/model/donation.dart';
 import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart';
 
 class Home_1 extends StatefulWidget {
   final String userID;
+  final String user_group;
   final List donationList;
   final int my_group;
   final List<DonationModel2> getDonationdata;
@@ -20,6 +20,7 @@ class Home_1 extends StatefulWidget {
     required this.donationList,
     required this.my_group,
     required this.getDonationdata,
+    required this.user_group,
   });
 
   @override
@@ -28,7 +29,7 @@ class Home_1 extends StatefulWidget {
 
 class _Home_1State extends State<Home_1> {
   late Future<UserModel>? usermodel;
-  late Future<List<DonationModel>> getDonationdata;
+  //late Future<List<DonationModel>> getDonationdata2;
   late Future<List<dynamic>>? donationpoint;
 
   static Future<List<dynamic>> getDonationPointdata(
@@ -86,7 +87,7 @@ class _Home_1State extends State<Home_1> {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
     donationpoint = getDonationPointdata(widget.getDonationdata);
-    getDonationdata = ApiService.getDonationdata(widget.donationList);
+    //getDonationdata = ApiService.getDonationdata(widget.donationList);
   }
 
   @override
@@ -221,68 +222,61 @@ class _Home_1State extends State<Home_1> {
                 ),
               ),
             ),
-            FutureBuilder(
-              future: getDonationdata,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((BuildContext context) => Home(
-                                page: 2,
-                                search_group: 3,
-                                userID: widget.userID,
-                                donationList: widget.donationList,
-                                my_group: 0,
-                              )),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 10,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF3F3F3),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((BuildContext context) => Home(
+                          page: 2,
+                          search_group: 3,
+                          userID: widget.userID,
+                          donationList: widget.donationList,
+                          my_group: 0,
+                          user_group: widget.user_group,
+                        )),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 10,
+                  left: 10,
+                  right: 10,
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF3F3F3),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 13),
+                        child: Text(
+                          '자세히 보기',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
                           ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 13),
-                              child: Text(
-                                '자세히 보기',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 20,
-                            )
-                          ],
-                        ),
                       ),
-                    ),
-                  );
-                }
-                return Container();
-              },
+                      Icon(
+                        Icons.chevron_right,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 20,
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -360,69 +354,62 @@ class _Home_1State extends State<Home_1> {
                 ),
               ),
             ),
-            FutureBuilder(
-              future: getDonationdata,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((BuildContext context) => Home(
-                                page: 2,
-                                search_group: 1,
-                                userID: widget.userID,
-                                donationList: widget.donationList,
-                                my_group: 0,
-                              )),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 10,
-                        left: 10,
-                        right: 10,
-                      ),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF3F3F3),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((BuildContext context) => Home(
+                          page: 2,
+                          search_group: 1,
+                          userID: widget.userID,
+                          donationList: widget.donationList,
+                          my_group: 0,
+                          user_group: widget.user_group,
+                        )),
+                    fullscreenDialog: true,
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  bottom: 10,
+                  left: 10,
+                  right: 10,
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFF3F3F3),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 13),
+                        child: Text(
+                          '자세히 보기',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
                           ),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 13),
-                              child: Text(
-                                '자세히 보기',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.chevron_right,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 20,
-                            )
-                          ],
-                        ),
                       ),
-                    ),
-                  );
-                }
-                return Container();
-              },
-            )
+                      Icon(
+                        Icons.chevron_right,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 20,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         const Banners(
