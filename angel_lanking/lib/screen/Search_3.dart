@@ -1,4 +1,3 @@
-import 'package:angel_lanking/screen/Search_1.dart';
 import 'package:flutter/material.dart';
 
 class Search_3 extends StatelessWidget {
@@ -23,11 +22,7 @@ class Search_3 extends StatelessWidget {
             ),
           ),
         ),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
+        //Friend(cost: 800, total: 1000),
       ],
     );
   }

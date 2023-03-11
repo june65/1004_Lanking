@@ -5,12 +5,15 @@ import 'package:angel_lanking/screen/Search_4.dart';
 import 'package:flutter/material.dart';
 
 class Home_3 extends StatefulWidget {
+  final String userID, user_group;
   final int search_group;
   final int my_group;
   const Home_3({
     super.key,
     required this.search_group,
     required this.my_group,
+    required this.userID,
+    required this.user_group,
   });
 
   @override
@@ -44,8 +47,9 @@ class _Home_3State extends State<Home_3> {
                         });
                       },
                       child: _search_group == 1
-                          ? const Selected_button(button_text: '친구')
-                          : const None_Selected_button(button_text: '친구'),
+                          ? Selected_button(button_text: widget.user_group)
+                          : None_Selected_button(
+                              button_text: widget.user_group),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -67,6 +71,7 @@ class _Home_3State extends State<Home_3> {
                           ? const Selected_button(button_text: '인플루언서')
                           : const None_Selected_button(button_text: '인플루언서'),
                     ),
+                    /*
                     GestureDetector(
                       onTap: () {
                         setState(() {
@@ -77,6 +82,7 @@ class _Home_3State extends State<Home_3> {
                           ? const Selected_button(button_text: '기업')
                           : const None_Selected_button(button_text: '기업'),
                     ),
+                    */
                   ],
                 ),
               ),
@@ -85,7 +91,9 @@ class _Home_3State extends State<Home_3> {
         ),
         Column(
           children: [
-            _search_group == 1 ? const Search_1() : Container(),
+            _search_group == 1
+                ? Search_1(user_group: widget.user_group, userID: widget.userID)
+                : Container(),
             _search_group == 2 ? const Search_2() : Container(),
             _search_group == 3 ? const Search_3() : Container(),
             _search_group == 4 ? const Search_4() : Container(),

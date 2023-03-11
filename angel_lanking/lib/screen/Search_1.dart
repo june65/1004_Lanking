@@ -1,13 +1,30 @@
+import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/model/groupuser.dart';
+import 'package:angel_lanking/widget/FriendMain.dart';
 import 'package:flutter/material.dart';
 
-class Search_1 extends StatelessWidget {
-  const Search_1({super.key});
+class Search_1 extends StatefulWidget {
+  final String userID, user_group;
+  const Search_1({super.key, required this.user_group, required this.userID});
+
+  @override
+  State<Search_1> createState() => _Search_1State();
+}
+
+class _Search_1State extends State<Search_1> {
+  late Future<GroupUserModel>? groupusermodel;
+
+  @override
+  void initState() {
+    super.initState();
+    groupusermodel = ApiService.getGroupUser(widget.user_group);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: const [
-        Padding(
+      children: [
+        const Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 5,
@@ -22,182 +39,21 @@ class Search_1 extends StatelessWidget {
             ),
           ),
         ),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-        Friend(cost: 800, total: 1000),
-      ],
-    );
-  }
-}
-
-class Friend extends StatelessWidget {
-  final int cost;
-  final int total;
-
-  const Friend({
-    super.key,
-    required this.cost,
-    required this.total,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 1.0,
-            color: const Color(0xFFCCCCCC),
-          ),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+        FutureBuilder(
+          future: groupusermodel,
+          builder: ((context, groupSnapshot) {
+            if (groupSnapshot.hasData) {
+              return Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image.network(
-                      'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                      width: 80,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '1. 홍길동',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  right: 5,
-                                  top: 5,
-                                ),
-                                child: Icon(
-                                  Icons.circle,
-                                  size: 10,
-                                  color: Color(0xFF007913),
-                                ),
-                              ),
-                              Text(
-                                '초록우산 어린이재단',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF464646),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text(
-                            '실버 III 97.5%',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xFF464646),
-                            ),
-                          ),
-                          const Text(
-                            '(721,322/1,012,341)',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Color(0xFFAEAEAE),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 2,
-                            ),
-                            child: Container(
-                              height: 10,
-                              width: double.infinity,
-                              color: const Color(0xFFC8C8C8),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: cost,
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
-                                        ),
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topRight,
-                                          end: Alignment.bottomLeft,
-                                          colors: [
-                                            Color(0xFF4A4A4A),
-                                            Color(0xFFA4A4A4),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: (total - cost),
-                                    child: Container(
-                                      color: const Color(0xFFC8C8C8),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              Text(
-                                '총 기부금 : 1,000,000원',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF464646),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                '총 기부점수 : 3,114점',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Color(0xFF464646),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                  for (var group in groupSnapshot.data!.user)
+                    FriendMain(userID: group)
                 ],
-              ),
-            ],
-          ),
+              );
+            }
+            return Container();
+          }),
         ),
-      ),
+      ],
     );
   }
 }

@@ -50,9 +50,28 @@ class _Search_2State extends State<Search_2> {
                         userlist: group.user,
                         image: group.image,
                         donationlist: group.donation,
+                        index: donationSnapshot2.data!.indexOf(group) + 1,
                       ),
                   ],
                 );
+                /*ListView.separated(
+                  itemCount: donationSnapshot2.data!.length,
+                  itemBuilder: (context, index) {
+                    return Profile(
+                      name: donationSnapshot2.data![index].name,
+                      userlist: donationSnapshot2.data![index].user,
+                      image: donationSnapshot2.data![index].image,
+                      donationlist: donationSnapshot2.data![index].donation,
+                      index: index,
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Divider(
+                    color: Colors.grey,
+                    height: 0,
+                  ),
+                );
+                
+                */
               } else {
                 return Container();
               }

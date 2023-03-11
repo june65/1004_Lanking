@@ -6,7 +6,6 @@ class Tier_image extends StatelessWidget {
   final String tier;
   final String userID;
   final List donationList;
-  final int my_group;
   final List<DonationModel2> getDonationdata;
 
   Tier_image({
@@ -14,7 +13,6 @@ class Tier_image extends StatelessWidget {
     required this.userID,
     required this.tier,
     required this.donationList,
-    required this.my_group,
     required this.getDonationdata,
   });
 

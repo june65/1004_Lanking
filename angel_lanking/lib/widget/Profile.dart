@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class Profile extends StatefulWidget {
   final String name;
   final String image;
+  final int index;
   final List userlist;
   final List donationlist;
   const Profile({
@@ -14,6 +15,7 @@ class Profile extends StatefulWidget {
     required this.userlist,
     required this.image,
     required this.donationlist,
+    required this.index,
   });
 
   @override
@@ -57,7 +59,8 @@ class _ProfileState extends State<Profile> {
               userlist: widget.userlist,
               image: widget.image,
               donationlist: widget.donationlist,
-              getDonationdata: snapshot.data!);
+              getDonationdata: snapshot.data!,
+              index: widget.index);
         }
         return Container();
       },

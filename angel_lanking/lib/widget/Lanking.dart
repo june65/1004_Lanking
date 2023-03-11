@@ -67,7 +67,6 @@ class Lanking extends StatelessWidget {
                           userID: userID,
                           tier: lank,
                           donationList: donationList,
-                          my_group: my_group,
                           getDonationdata: getDonationdata)),
                       fullscreenDialog: true,
                     ),

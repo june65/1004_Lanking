@@ -115,6 +115,9 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Hero(
                     tag: 'main_symbol',
                     child: Row(
@@ -201,9 +204,10 @@ class _HomeState extends State<Home> {
                       : Column(),
                   page_number == 2
                       ? Home_3(
-                          search_group: search_group_,
-                          my_group: 0,
-                        )
+                          search_group: widget.search_group,
+                          my_group: widget.my_group,
+                          userID: widget.userID,
+                          user_group: widget.user_group)
                       : Column(),
                   page_number == 3
                       ? FutureBuilder(

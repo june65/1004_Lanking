@@ -1,9 +1,12 @@
+import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/model/donation2.dart';
+import 'package:angel_lanking/model/user.dart';
 import 'package:flutter/material.dart';
 
 class Profile_inner extends StatefulWidget {
   final String name;
   final String image;
+  final int index;
   final List userlist;
   final List donationlist;
   final List<DonationModel2> getDonationdata;
@@ -14,6 +17,7 @@ class Profile_inner extends StatefulWidget {
     required this.image,
     required this.donationlist,
     required this.getDonationdata,
+    required this.index,
   });
 
   @override
@@ -23,10 +27,23 @@ class Profile_inner extends StatefulWidget {
 class _Profile_innerState extends State<Profile_inner> {
   late Future<int>? donationpoint;
 
+  late Future<UserModel>? usermodel1;
+  late Future<UserModel>? usermodel2;
+  late Future<UserModel>? usermodel3;
+
   @override
   void initState() {
     super.initState();
     donationpoint = getDonationPointdata(widget.getDonationdata);
+    if (widget.userlist.isNotEmpty) {
+      usermodel1 = ApiService.getUserdata(widget.userlist[0]);
+    }
+    if (widget.userlist.length > 1) {
+      usermodel2 = ApiService.getUserdata(widget.userlist[1]);
+    }
+    if (widget.userlist.length > 2) {
+      usermodel3 = ApiService.getUserdata(widget.userlist[2]);
+    }
   }
 
   static Future<int> getDonationPointdata(
@@ -66,77 +83,183 @@ class _Profile_innerState extends State<Profile_inner> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Image.network(
-                        widget.image,
-                        width: 100,
-                        fit: BoxFit.fitWidth,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
                       children: [
-                        Text(
-                          widget.name,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.network(
+                            widget.image,
+                            width: 100,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
-                        Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: 5,
-                                top: 5,
-                              ),
-                              child: Icon(
-                                Icons.circle,
-                                size: 10,
-                                color: Color(0xFF007913),
-                              ),
-                            ),
-                            Text(
-                              '대학교',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Color(0xFF464646),
-                              ),
-                            ),
-                          ],
+                        const SizedBox(
+                          width: 15,
                         ),
-                        FutureBuilder(
-                            future: donationpoint,
-                            builder: ((context, scoreSnapshot) {
-                              if (scoreSnapshot.hasData) {
-                                return Text(
-                                  '총 기부금 : ${scoreSnapshot.data}원',
-                                  style: const TextStyle(
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${widget.index}. ${widget.name}',
+                              style: const TextStyle(
+                                fontSize: 17,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Row(
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: 5,
+                                    top: 5,
+                                  ),
+                                  child: Icon(
+                                    Icons.circle,
+                                    size: 10,
+                                    color: Color(0xFF007913),
+                                  ),
+                                ),
+                                Text(
+                                  '대학교',
+                                  style: TextStyle(
                                     fontSize: 10,
                                     color: Color(0xFF464646),
                                   ),
-                                );
-                              } else {
-                                return Container();
-                              }
-                            })),
+                                ),
+                              ],
+                            ),
+                            FutureBuilder(
+                                future: donationpoint,
+                                builder: ((context, scoreSnapshot) {
+                                  if (scoreSnapshot.hasData) {
+                                    return Text(
+                                      '총 기부금 : ${scoreSnapshot.data}원',
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Color(0xFF464646),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container();
+                                  }
+                                })),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+              const Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Text('기부천사 TOP3'),
+              ),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: (widget.userlist.isNotEmpty)
+                        ? FutureBuilder(
+                            future: usermodel1,
+                            builder: (context, snapshot1) {
+                              if (snapshot1.hasData) {
+                                return Column(
+                                  children: [
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Image.network(
+                                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
+                                          width: 70,
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                    ),
+                                    Text('1.${snapshot1.data!.name}'),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            })
+                        : const Icon(Icons.data_object),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: (widget.userlist.length > 1)
+                        ? FutureBuilder(
+                            future: usermodel2,
+                            builder: (context, snapshot2) {
+                              if (snapshot2.hasData) {
+                                return Column(
+                                  children: [
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Image.network(
+                                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
+                                          width: 70,
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                    ),
+                                    Text('2.${snapshot2.data!.name}'),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            })
+                        : const Center(
+                            child: Icon(
+                              Icons.no_accounts_outlined,
+                              size: 70,
+                              color: Color.fromARGB(255, 215, 215, 215),
+                            ),
+                          ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: (widget.userlist.length > 2)
+                        ? FutureBuilder(
+                            future: usermodel3,
+                            builder: (context, snapshot3) {
+                              if (snapshot3.hasData) {
+                                return Column(
+                                  children: [
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10.0),
+                                        child: Image.network(
+                                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
+                                          width: 70,
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                    ),
+                                    Text('3.${snapshot3.data!.name}'),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            })
+                        : const Center(
+                            child: Icon(
+                              Icons.no_accounts_outlined,
+                              size: 70,
+                              color: Color.fromARGB(255, 215, 215, 215),
+                            ),
+                          ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
