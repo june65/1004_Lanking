@@ -13,7 +13,16 @@ class Search_1 extends StatefulWidget {
 
 class _Search_1State extends State<Search_1> {
   late Future<GroupUserModel>? groupusermodel;
-
+  TextEditingController search_user_id = TextEditingController();
+  /*
+  검색기능
+  bool show = true;
+  void search_fuction() {
+    if (search_user_id.text.length % 2 == 0) {
+      bool show = false;
+    } 
+  }
+  */
   @override
   void initState() {
     super.initState();
@@ -24,21 +33,32 @@ class _Search_1State extends State<Search_1> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(
+        /*
+        Padding(
+          padding: const EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 5,
           ),
+          
           child: TextField(
-            decoration: InputDecoration(
+            controller: search_user_id,
+            decoration: const InputDecoration(
               border: OutlineInputBorder(
                 //Outline border type for TextFeild
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               labelText: '아이디 ex) 1004_lanking',
             ),
+            
+            onChanged: (value) {
+              setState(() {
+                search_fuction();
+              });
+            },
+            
           ),
         ),
+        */
         FutureBuilder(
           future: groupusermodel,
           builder: ((context, groupSnapshot) {

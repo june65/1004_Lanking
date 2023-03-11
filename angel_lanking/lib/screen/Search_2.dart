@@ -23,6 +23,7 @@ class _Search_2State extends State<Search_2> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        /*
         const Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 10,
@@ -38,6 +39,7 @@ class _Search_2State extends State<Search_2> {
             ),
           ),
         ),
+        */
         FutureBuilder(
             future: grouplistmodel,
             builder: ((context, donationSnapshot2) {
