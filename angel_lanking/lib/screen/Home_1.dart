@@ -182,15 +182,15 @@ class _Home_1State extends State<Home_1> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.only(
+                      Padding(
+                        padding: const EdgeInsets.only(
                           bottom: 15,
                           top: 5,
                           left: 5,
                         ),
                         child: Text(
-                          '이번주 기업랭킹',
-                          style: TextStyle(
+                          '${widget.user_group} 랭킹',
+                          style: const TextStyle(
                             fontSize: 17,
                             color: Colors.black,
                           ),
@@ -229,7 +229,7 @@ class _Home_1State extends State<Home_1> {
                   MaterialPageRoute(
                     builder: ((BuildContext context) => Home(
                           page: 2,
-                          search_group: 3,
+                          search_group: 1,
                           userID: widget.userID,
                           donationList: widget.donationList,
                           my_group: 0,

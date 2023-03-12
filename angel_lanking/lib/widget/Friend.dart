@@ -111,7 +111,7 @@ class Friend extends StatelessWidget {
                           height: 15,
                         ),
                         Text(
-                          '$lank  $persent%',
+                          lank,
                           style: const TextStyle(
                             fontSize: 13,
                             color: Color(0xFF464646),

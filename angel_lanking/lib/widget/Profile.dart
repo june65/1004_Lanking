@@ -31,23 +31,6 @@ class _ProfileState extends State<Profile> {
     getDonationdata = ApiService.getDonationdata2(widget.donationlist);
   }
 
-  static Future<dynamic> getDonationPointdata(
-      List<DonationModel2> DonationPointList) async {
-    late int Start = 0;
-    late int Final = 0;
-    late int Sum = 0;
-    late double Persent = 0.0;
-
-    for (int i = 0; i < DonationPointList.length; i++) {
-      if (DonationPointList[i].delete) {
-        if (DonationPointList[i].pass) {
-          Sum += DonationPointList[i].money;
-        }
-      }
-    }
-    return Sum;
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

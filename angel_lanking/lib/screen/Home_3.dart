@@ -68,8 +68,8 @@ class _Home_3State extends State<Home_3> {
                         });
                       },
                       child: _search_group == 3
-                          ? const Selected_button(button_text: '인플루언서')
-                          : const None_Selected_button(button_text: '인플루언서'),
+                          ? const Selected_button(button_text: '전체랭킹')
+                          : const None_Selected_button(button_text: '전체랭킹'),
                     ),
                     /*
                     GestureDetector(

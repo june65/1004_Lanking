@@ -1,4 +1,5 @@
 import 'package:angel_lanking/api_service.dart';
+import 'package:angel_lanking/manager/Manager.dart';
 import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/screen/Home_1.dart';
 import 'package:angel_lanking/screen/Home_2.dart';
@@ -118,66 +119,62 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Hero(
-                    tag: 'main_symbol',
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(),
-                        Image.network(
-                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/main_logo.png',
-                          width: 120,
-                          height: 60,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                /*
-                                GestureDetector(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Hero(
+                      tag: 'main_symbol',
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          (widget.userID == '4QlCrysJ0sgJJqZH7eToBPohCqS2')
+                              ? GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: ((BuildContext context) =>
-                                            const Signup_group()),
+                                            const Manager()),
                                         fullscreenDialog: true,
                                       ),
                                     );
                                   },
                                   child: const Icon(
-                                    Icons.search,
+                                    Icons.manage_accounts,
                                     color: Color(0xFF666666),
                                     size: 30,
                                   ),
+                                )
+                              : Container(
+                                  width: 30,
                                 ),
-                                */
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: ((BuildContext context) =>
-                                            Signup_group(
-                                              user_id_save: 'user_id_save',
-                                              userID: widget.userID,
-                                            )),
-                                        fullscreenDialog: true,
-                                      ),
-                                    );
-                                  },
-                                  child: const Icon(
-                                    Icons.notifications_none_outlined,
-                                    color: Color(0xFF666666),
-                                    size: 30,
-                                  ),
+                          Image.network(
+                            'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/main_logo.png',
+                            width: 120,
+                            height: 60,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: ((BuildContext context) =>
+                                      Signup_group(
+                                        user_id_save: 'user_id_save',
+                                        userID: widget.userID,
+                                      )),
+                                  fullscreenDialog: true,
                                 ),
-                              ],
+                              );
+                            },
+                            child: const Icon(
+                              Icons.notifications_none_outlined,
+                              color: Color(0xFF666666),
+                              size: 30,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   page_number == 0
