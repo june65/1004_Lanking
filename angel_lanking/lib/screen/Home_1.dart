@@ -1,5 +1,6 @@
 import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/model/donation2.dart';
+import 'package:angel_lanking/model/groupuser.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/widget/Banner.dart';
@@ -31,63 +32,15 @@ class _Home_1State extends State<Home_1> {
   late Future<UserModel>? usermodel;
   //late Future<List<DonationModel>> getDonationdata2;
   late Future<List<dynamic>>? donationpoint;
-
-  static Future<List<dynamic>> getDonationPointdata(
-      List<DonationModel2> DonationPointList) async {
-    late int Start = 0;
-    late int Final = 0;
-    late int Sum = 0;
-    late double Persent = 0.0;
-
-    for (int i = 0; i < DonationPointList.length; i++) {
-      if (DonationPointList[i].delete) {
-        if (DonationPointList[i].pass) {
-          Sum += DonationPointList[i].money;
-        }
-      }
-    }
-
-    late String tear = 'unranked';
-
-    if (Sum < 30000) {
-      tear = 'Bronze';
-      Final = 30000;
-      Persent = 92.1;
-    } else if (Sum < 100000) {
-      tear = 'Silver';
-      Start = 30000;
-      Final = 100000;
-      Persent = 71.3;
-    } else if (Sum < 200000) {
-      tear = 'Gold';
-      Start = 100000;
-      Final = 200000;
-      Persent = 40.7;
-    } else if (Sum < 500000) {
-      tear = 'Platinum';
-      Start = 200000;
-      Final = 500000;
-      Persent = 10.7;
-    } else if (Sum < 1000000) {
-      tear = 'Diamond';
-      Start = 500000;
-      Final = 1000000;
-      Persent = 5.7;
-    } else {
-      tear = 'Master';
-      Start = 1000000;
-      Final = 1000000;
-      Persent = 1.7;
-    }
-    return [Sum, tear, Start, Final, Persent];
-  }
+  late Future<GroupUserModel> groupusers;
 
   @override
   void initState() {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
-    donationpoint = getDonationPointdata(widget.getDonationdata);
+    donationpoint = ApiService.getDonationPointdata(widget.getDonationdata);
     //getDonationdata = ApiService.getDonationdata(widget.donationList);
+    groupusers = ApiService.getGroupUser(widget.user_group);
   }
 
   @override
@@ -186,7 +139,7 @@ class _Home_1State extends State<Home_1> {
                         padding: const EdgeInsets.only(
                           bottom: 15,
                           top: 5,
-                          left: 5,
+                          left: 10,
                         ),
                         child: Text(
                           '${widget.user_group} 랭킹',
@@ -196,27 +149,44 @@ class _Home_1State extends State<Home_1> {
                           ),
                         ),
                       ),
-                      const Company_Lanking(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black,
-                        ),
+                      FutureBuilder(
+                        future: groupusers,
+                        builder: ((context, groupSnapshot) {
+                          if (groupSnapshot.hasData) {
+                            return Column(
+                              children: [
+                                for (var group in groupSnapshot.data!.user)
+                                  if (groupSnapshot.data!.user.indexOf(group) <
+                                      5)
+                                    Column(
+                                      children: [
+                                        (groupSnapshot.data!.user
+                                                    .indexOf(group) !=
+                                                0)
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                ),
+                                                child: Container(
+                                                  height: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                              )
+                                            : Container(),
+                                        Main_Lanking(
+                                            userID: group,
+                                            index: groupSnapshot.data!.user
+                                                    .indexOf(group) +
+                                                1),
+                                      ],
+                                    ),
+                              ],
+                            );
+                          }
+                          return Container();
+                        }),
                       ),
-                      const Company_Lanking(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Company_Lanking(),
                     ],
                   ),
                 ),
@@ -318,37 +288,54 @@ class _Home_1State extends State<Home_1> {
                         padding: EdgeInsets.only(
                           bottom: 15,
                           top: 5,
-                          left: 5,
+                          left: 10,
                         ),
                         child: Text(
-                          '이번주 기업랭킹',
+                          '단체별 랭킹',
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.black,
                           ),
                         ),
                       ),
-                      const Company_Lanking(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black,
-                        ),
+                      FutureBuilder(
+                        future: groupusers,
+                        builder: ((context, groupSnapshot) {
+                          if (groupSnapshot.hasData) {
+                            return Column(
+                              children: [
+                                for (var group in groupSnapshot.data!.user)
+                                  if (groupSnapshot.data!.user.indexOf(group) <
+                                      5)
+                                    Column(
+                                      children: [
+                                        (groupSnapshot.data!.user
+                                                    .indexOf(group) !=
+                                                0)
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                ),
+                                                child: Container(
+                                                  height: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                              )
+                                            : Container(),
+                                        Main_Lanking(
+                                            userID: group,
+                                            index: groupSnapshot.data!.user
+                                                    .indexOf(group) +
+                                                1),
+                                      ],
+                                    ),
+                              ],
+                            );
+                          }
+                          return Container();
+                        }),
                       ),
-                      const Company_Lanking(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Company_Lanking(),
                     ],
                   ),
                 ),
@@ -418,135 +405,185 @@ class _Home_1State extends State<Home_1> {
           link: 'https://chest.or.kr/base.do',
         ),
         const Website(),
-        Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 10,
-                left: 10,
-                right: 10,
-              ),
-              child: Container(
-                alignment: Alignment.topLeft,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFE6E6E6),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    left: 10,
-                    right: 10,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(
-                          bottom: 15,
-                          top: 5,
-                          left: 5,
-                        ),
-                        child: Text(
-                          '이번주 기업랭킹',
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      const Company_Lanking(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Company_Lanking(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: Container(
-                          height: 1,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const Company_Lanking(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
 }
 
-class Company_Lanking extends StatelessWidget {
-  const Company_Lanking({
+class Main_Lanking extends StatefulWidget {
+  final String userID;
+  final int index;
+  const Main_Lanking({
     Key? key,
+    required this.userID,
+    required this.index,
   }) : super(key: key);
 
   @override
+  State<Main_Lanking> createState() => _Main_LankingState();
+}
+
+class _Main_LankingState extends State<Main_Lanking> {
+  late Future<UserModel>? usermodel;
+  //late Future<List<DonationModel>> getDonationdata2;
+  @override
+  void initState() {
+    super.initState();
+    usermodel = ApiService.getUserdata(widget.userID);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 5,
-      ),
+    return FutureBuilder(
+      future: usermodel,
+      builder: ((context, userSnapshot) {
+        if (userSnapshot.hasData) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 5,
+            ),
+            child: Main_Lanking_score(
+              donationList: userSnapshot.data!.donation,
+              index: widget.index.toString(),
+              user_name: userSnapshot.data!.name,
+            ),
+          );
+        }
+        return Container();
+      }),
+    );
+  }
+}
+
+class Main_Lanking_score extends StatefulWidget {
+  final List<dynamic> donationList;
+  final String user_name;
+  final String index;
+  const Main_Lanking_score({
+    Key? key,
+    required this.donationList,
+    required this.user_name,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  State<Main_Lanking_score> createState() => _Main_Lanking_scoreState();
+}
+
+class _Main_Lanking_scoreState extends State<Main_Lanking_score> {
+  late Future<List<DonationModel2>>? getDonationdata;
+
+  @override
+  void initState() {
+    super.initState();
+    getDonationdata = ApiService.getDonationdata2(widget.donationList);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: getDonationdata,
+      builder: (context, snapshot2) {
+        if (snapshot2.hasData) {
+          return Main_Lanking_makeList(
+            donationList: snapshot2.data!,
+            user_name: widget.user_name,
+            index: widget.index,
+          );
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class Main_Lanking_makeList extends StatefulWidget {
+  final List<DonationModel2> donationList;
+  final String user_name;
+  final String index;
+  const Main_Lanking_makeList({
+    Key? key,
+    required this.donationList,
+    required this.user_name,
+    required this.index,
+  }) : super(key: key);
+
+  @override
+  State<Main_Lanking_makeList> createState() => _Main_Lanking_makeListState();
+}
+
+class _Main_Lanking_makeListState extends State<Main_Lanking_makeList> {
+  late Future<List<dynamic>>? getDonationdata;
+
+  @override
+  void initState() {
+    super.initState();
+    getDonationdata = ApiService.getDonationPointdata(widget.donationList);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            '1',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-            ),
-          ),
-          const Text(
-            '삼성',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.black,
-            ),
-          ),
-          Image.network(
-            'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-            width: 30,
-            fit: BoxFit.fitWidth,
-          ),
           Row(
-            children: const [
-              Text(
-                '총 기부금 1000,000원',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.black,
-                ),
+            children: [
+              const SizedBox(
+                width: 20,
               ),
-              SizedBox(
-                width: 5,
-              ),
-              Text(
-                '총 기부점수 4,231점',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.black,
-                ),
+              Row(
+                children: [
+                  Text(
+                    '${widget.index}. ',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    widget.user_name,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
               ),
             ],
+          ),
+          FutureBuilder(
+            future: getDonationdata,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return SizedBox(
+                  width: 160,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.network(
+                        'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
+                        width: 30,
+                        fit: BoxFit.fitWidth,
+                      ),
+                      const SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        '총 기부금 : ${snapshot.data![0]}원',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return Container();
+            },
           ),
         ],
       ),
