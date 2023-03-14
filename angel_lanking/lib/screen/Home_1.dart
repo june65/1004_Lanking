@@ -33,7 +33,7 @@ class _Home_1State extends State<Home_1> {
   //late Future<List<DonationModel>> getDonationdata2;
   late Future<List<dynamic>>? donationpoint;
   late Future<GroupUserModel> groupusers;
-
+  late Future<List<GroupUserModel>>? grouplistmodel;
   @override
   void initState() {
     super.initState();
@@ -41,6 +41,7 @@ class _Home_1State extends State<Home_1> {
     donationpoint = ApiService.getDonationPointdata(widget.getDonationdata);
     //getDonationdata = ApiService.getDonationdata(widget.donationList);
     groupusers = ApiService.getGroupUser(widget.user_group);
+    grouplistmodel = ApiService.getGroupList();
   }
 
   @override
@@ -299,18 +300,16 @@ class _Home_1State extends State<Home_1> {
                         ),
                       ),
                       FutureBuilder(
-                        future: groupusers,
+                        future: grouplistmodel,
                         builder: ((context, groupSnapshot) {
                           if (groupSnapshot.hasData) {
                             return Column(
                               children: [
-                                for (var group in groupSnapshot.data!.user)
-                                  if (groupSnapshot.data!.user.indexOf(group) <
-                                      5)
+                                for (var group in groupSnapshot.data!)
+                                  if (groupSnapshot.data!.indexOf(group) < 5)
                                     Column(
                                       children: [
-                                        (groupSnapshot.data!.user
-                                                    .indexOf(group) !=
+                                        (groupSnapshot.data!.indexOf(group) !=
                                                 0)
                                             ? Padding(
                                                 padding:
@@ -323,11 +322,13 @@ class _Home_1State extends State<Home_1> {
                                                 ),
                                               )
                                             : Container(),
-                                        Main_Lanking(
-                                            userID: group,
-                                            index: groupSnapshot.data!.user
-                                                    .indexOf(group) +
-                                                1),
+                                        Main_Lanking_score(
+                                            donationList: group.donation,
+                                            user_name: group.name,
+                                            index: (groupSnapshot.data!
+                                                        .indexOf(group) +
+                                                    1)
+                                                .toString()),
                                       ],
                                     ),
                               ],
