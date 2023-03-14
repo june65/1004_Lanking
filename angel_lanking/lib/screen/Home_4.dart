@@ -49,8 +49,17 @@ class _Home_4State extends State<Home_4> {
   TextEditingController detail = TextEditingController();
   TextEditingController money = TextEditingController();
 
-  List<String> dropdownList = ['child', 'old', 'world'];
-  String selectedDropdown = 'child';
+  List<String> dropdownList = [
+    '사회복지',
+    '의료',
+    '해외 구호활동',
+    '지역사회 발전',
+    '교육 및 연구활동',
+    '공익활동',
+    '문화 및 예술 ',
+    '기타'
+  ];
+  String selectedDropdown = '사회복지';
   int my_group_ = 0;
   bool loading = true;
 
@@ -147,85 +156,44 @@ class _Home_4State extends State<Home_4> {
     getDonationdata2 = ApiService.getDonationdata2(widget.donationList);
     donation_fuction();
     newdonationList = widget.donationList;
-    donationpoint = getDonationPointdata(widget.getDonationdata);
+    donationpoint = ApiService.getDonationPointdata(widget.getDonationdata);
     groupusermodel = ApiService.getGroupUser(widget.user_group);
   }
 
   static Future<List<num>> getDonationGroupdata(List DonationGroupList) async {
-    late num Child = 0;
-    late num Old = 0;
-    late num World = 0;
-    late num Others = 0;
+    List<num> listGroupdonation = [0, 0, 0, 0, 0, 0, 0, 0];
 
     for (int i = 0; i < DonationGroupList.length; i++) {
       if (DonationGroupList[i].delete) {
         if (DonationGroupList[i].pass) {
-          if (DonationGroupList[i].group == 'child') {
-            Child += DonationGroupList[i].money;
+          if (DonationGroupList[i].group == '사회복지') {
+            listGroupdonation[0] += DonationGroupList[i].money;
           }
-          if (DonationGroupList[i].group == 'old') {
-            Old += DonationGroupList[i].money;
+          if (DonationGroupList[i].group == '의료') {
+            listGroupdonation[1] += DonationGroupList[i].money;
           }
-          if (DonationGroupList[i].group == 'world') {
-            World += DonationGroupList[i].money;
+          if (DonationGroupList[i].group == '해외 구호활동') {
+            listGroupdonation[2] += DonationGroupList[i].money;
           }
-          if (DonationGroupList[i].group == 'others') {
-            Others += DonationGroupList[i].money;
+          if (DonationGroupList[i].group == '지역사회 발전') {
+            listGroupdonation[3] += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == '교육 및 연구활동') {
+            listGroupdonation[4] += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == '공익활동') {
+            listGroupdonation[5] += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == '문화 및 예술') {
+            listGroupdonation[6] += DonationGroupList[i].money;
+          }
+          if (DonationGroupList[i].group == '기타') {
+            listGroupdonation[7] += DonationGroupList[i].money;
           }
         }
       }
     }
-    return [Child, Old, World, Others];
-  }
-
-  static Future<List<dynamic>> getDonationPointdata(
-      List<DonationModel2> DonationPointList) async {
-    late int Start = 0;
-    late int Final = 0;
-    late int Sum = 0;
-    late double Persent = 0.0;
-
-    for (int i = 0; i < DonationPointList.length; i++) {
-      if (DonationPointList[i].delete) {
-        if (DonationPointList[i].pass) {
-          Sum += DonationPointList[i].money;
-        }
-      }
-    }
-
-    late String tear = 'Unranked';
-
-    if (Sum < 30000) {
-      tear = 'Bronze';
-      Final = 30000;
-      Persent = 92.1;
-    } else if (Sum < 100000) {
-      tear = 'Silver';
-      Start = 30000;
-      Final = 100000;
-      Persent = 71.3;
-    } else if (Sum < 200000) {
-      tear = 'Gold';
-      Start = 100000;
-      Final = 200000;
-      Persent = 40.7;
-    } else if (Sum < 500000) {
-      tear = 'Platinum';
-      Start = 200000;
-      Final = 500000;
-      Persent = 10.7;
-    } else if (Sum < 1000000) {
-      tear = 'Diamond';
-      Start = 500000;
-      Final = 1000000;
-      Persent = 5.7;
-    } else {
-      tear = 'Master';
-      Start = 1000000;
-      Final = 1000000;
-      Persent = 1.7;
-    }
-    return [Sum, tear, Start, Final, Persent];
+    return listGroupdonation;
   }
 
   @override

@@ -31,23 +31,43 @@ class _GraphState extends State<Graph> {
 
   late List<ChartData> chartData = [
     ChartData(
-      'Child',
+      '사회복지',
       widget.donationGroupList[0].toDouble(),
       const Color(0xFF1ec0ff),
     ),
     ChartData(
-      'Old',
+      '의료',
       widget.donationGroupList[1].toDouble(),
+      const Color.fromARGB(255, 3, 141, 195),
+    ),
+    ChartData(
+      '해외 구호활동',
+      widget.donationGroupList[2].toDouble(),
+      const Color.fromARGB(255, 30, 255, 210),
+    ),
+    ChartData(
+      '지역사회 발전',
+      widget.donationGroupList[3].toDouble(),
+      const Color.fromARGB(255, 150, 211, 235),
+    ),
+    ChartData(
+      '교육 및 연구활동',
+      widget.donationGroupList[4].toDouble(),
+      const Color.fromARGB(255, 79, 92, 97),
+    ),
+    ChartData(
+      '공익활동',
+      widget.donationGroupList[5].toDouble(),
       const Color(0xFF0080ff),
     ),
     ChartData(
-      'World',
-      widget.donationGroupList[2].toDouble(),
+      '문화 및 예술',
+      widget.donationGroupList[6].toDouble(),
       const Color(0xFF03a6ff),
     ),
     ChartData(
-      'Others',
-      widget.donationGroupList[3].toDouble(),
+      '기타',
+      widget.donationGroupList[7].toDouble(),
       const Color(0xFFa3daff),
     ),
   ];
