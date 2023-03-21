@@ -5,6 +5,7 @@ import 'package:angel_lanking/model/donation_type.dart';
 import 'package:angel_lanking/model/groupuser.dart';
 import 'package:angel_lanking/model/number.dart';
 import 'package:angel_lanking/model/user.dart';
+import 'package:angel_lanking/screen/Coin_donation.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Home_3.dart';
 import 'package:angel_lanking/widget/Button.dart';
@@ -22,12 +23,14 @@ class Home_4 extends StatefulWidget {
   final String userID, user_group;
   final List donationList;
   final int my_group;
+  final int used_money;
   final List<DonationModel2> getDonationdata;
   const Home_4(
       {super.key,
       required this.userID,
       required this.donationList,
       required this.my_group,
+      required this.used_money,
       required this.getDonationdata,
       required this.user_group});
 
@@ -156,7 +159,8 @@ class _Home_4State extends State<Home_4> {
     getDonationdata2 = ApiService.getDonationdata2(widget.donationList);
     donation_fuction();
     newdonationList = widget.donationList;
-    donationpoint = ApiService.getDonationPointdata(widget.getDonationdata);
+    donationpoint = ApiService.getDonationPointdata(
+        widget.getDonationdata, widget.used_money);
     groupusermodel = ApiService.getGroupUser(widget.user_group);
   }
 
@@ -257,6 +261,108 @@ class _Home_4State extends State<Home_4> {
                           my_group: widget.my_group,
                         );
                       })),
+                  FutureBuilder(
+                    future: usermodel,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((BuildContext context) =>
+                                    Coin_donation(
+                                      userID: widget.userID,
+                                      money: snapshot.data!.money,
+                                      used_money: snapshot.data!.used_money,
+                                      user_group: widget.user_group,
+                                      donationList: widget.donationList,
+                                    )),
+                                fullscreenDialog: true,
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, bottom: 5),
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0047FF),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(
+                                        0, 3), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        children: [
+                                          Image.network(
+                                            'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/Group+55+(1).png',
+                                            width: 80,
+                                          ),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const Text(
+                                                '천사 머니',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${ApiService.money_f.format(snapshot.data!.money)}원',
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Column(
+                                      children: const [
+                                        Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            Icons.chevron_right,
+                                            size: 25,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      return Container();
+                    },
+                  ),
                   FutureBuilder(
                     future: donationGroupList,
                     builder: (context, snapshot) {
@@ -1009,15 +1115,9 @@ class _Home_4State extends State<Home_4> {
                                                             .instance
                                                             .collection('user')
                                                             .doc(widget.userID)
-                                                            .set({
-                                                          'name': snapshot
-                                                              .data!.name,
+                                                            .update({
                                                           'donation':
                                                               newdonationList,
-                                                          'instagram': snapshot
-                                                              .data!.instagram,
-                                                          'group': snapshot
-                                                              .data!.group
                                                         });
 
                                                         List

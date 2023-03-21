@@ -1,6 +1,7 @@
 import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/manager/Manager.dart';
 import 'package:angel_lanking/model/donation2.dart';
+import 'package:angel_lanking/model/user.dart';
 import 'package:angel_lanking/screen/Home_1.dart';
 import 'package:angel_lanking/screen/Home_2.dart';
 import 'package:angel_lanking/screen/Home_3.dart';
@@ -32,6 +33,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Future<List<DonationModel2>> getDonationdata;
+  late Future<UserModel>? usermodel;
   var page_number = 0;
   var search_group_ = 1;
 
@@ -41,6 +43,7 @@ class _HomeState extends State<Home> {
     page_number = widget.page;
     search_group_ = widget.search_group;
     getDonationdata = ApiService.getDonationdata2(widget.donationList);
+    usermodel = ApiService.getUserdata(widget.userID);
   }
 
   @override
@@ -179,15 +182,24 @@ class _HomeState extends State<Home> {
                   ),
                   page_number == 0
                       ? FutureBuilder(
-                          future: getDonationdata,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Home_1(
-                                userID: widget.userID,
-                                donationList: widget.donationList,
-                                getDonationdata: snapshot.data!,
-                                my_group: 0,
-                                user_group: widget.user_group,
+                          future: usermodel,
+                          builder: (context, snapshot2) {
+                            if (snapshot2.hasData) {
+                              return FutureBuilder(
+                                future: getDonationdata,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Home_1(
+                                      userID: widget.userID,
+                                      donationList: widget.donationList,
+                                      getDonationdata: snapshot.data!,
+                                      my_group: 0,
+                                      user_group: widget.user_group,
+                                      used_money: snapshot2.data!.used_money,
+                                    );
+                                  }
+                                  return Container();
+                                },
                               );
                             }
                             return Container();
@@ -208,15 +220,24 @@ class _HomeState extends State<Home> {
                       : Column(),
                   page_number == 3
                       ? FutureBuilder(
-                          future: getDonationdata,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Home_4(
-                                userID: widget.userID,
-                                donationList: widget.donationList,
-                                getDonationdata: snapshot.data!,
-                                my_group: widget.my_group,
-                                user_group: widget.user_group,
+                          future: usermodel,
+                          builder: (context, snapshot2) {
+                            if (snapshot2.hasData) {
+                              return FutureBuilder(
+                                future: getDonationdata,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Home_4(
+                                      userID: widget.userID,
+                                      donationList: widget.donationList,
+                                      getDonationdata: snapshot.data!,
+                                      my_group: widget.my_group,
+                                      user_group: widget.user_group,
+                                      used_money: snapshot2.data!.used_money,
+                                    );
+                                  }
+                                  return Container();
+                                },
                               );
                             }
                             return Container();

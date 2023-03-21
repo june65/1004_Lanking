@@ -31,9 +31,11 @@ class _FriendMainState extends State<FriendMain> {
         builder: ((context, userSnapshot) {
           if (userSnapshot.hasData) {
             return FriendHome(
-                userID: widget.userID,
-                user_group: userSnapshot.data!.group,
-                donationList: userSnapshot.data!.donation);
+              userID: widget.userID,
+              user_group: userSnapshot.data!.group,
+              donationList: userSnapshot.data!.donation,
+              used_money: userSnapshot.data!.used_money,
+            );
           } else {
             return Container();
           }

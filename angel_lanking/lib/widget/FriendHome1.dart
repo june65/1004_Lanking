@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class FriendHome_1 extends StatefulWidget {
   final String user_group;
   final String userID;
+  final int used_money;
   final List donationList;
   final List<DonationModel2> getDonationdata;
   const FriendHome_1({
     super.key,
     required this.userID,
+    required this.used_money,
     required this.user_group,
     required this.getDonationdata,
     required this.donationList,
@@ -29,57 +31,10 @@ class _FriendHome_1State extends State<FriendHome_1> {
   void initState() {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
-    donationpoint = getDonationPointdata(widget.getDonationdata);
-  }
-
-  static Future<List<dynamic>> getDonationPointdata(
-      List<DonationModel2> DonationPointList) async {
-    late int Start = 0;
-    late int Final = 0;
-    late int Sum = 0;
-    late double Persent = 0.0;
-
-    for (int i = 0; i < DonationPointList.length; i++) {
-      if (DonationPointList[i].delete) {
-        if (DonationPointList[i].pass) {
-          Sum += DonationPointList[i].money;
-        }
-      }
-    }
-
-    late String tear = 'unranked';
-
-    if (Sum < 30000) {
-      tear = 'Bronze';
-      Final = 30000;
-      Persent = 92.1;
-    } else if (Sum < 100000) {
-      tear = 'Silver';
-      Start = 30000;
-      Final = 100000;
-      Persent = 71.3;
-    } else if (Sum < 200000) {
-      tear = 'Gold';
-      Start = 100000;
-      Final = 200000;
-      Persent = 40.7;
-    } else if (Sum < 500000) {
-      tear = 'Platinum';
-      Start = 200000;
-      Final = 500000;
-      Persent = 10.7;
-    } else if (Sum < 1000000) {
-      tear = 'Diamond';
-      Start = 500000;
-      Final = 1000000;
-      Persent = 5.7;
-    } else {
-      tear = 'Master';
-      Start = 1000000;
-      Final = 1000000;
-      Persent = 1.7;
-    }
-    return [Sum, tear, Start, Final, Persent];
+    donationpoint = ApiService.getDonationPointdata(
+      widget.getDonationdata,
+      widget.used_money,
+    );
   }
 
   @override

@@ -142,7 +142,7 @@ class _Profile_innerState extends State<Profile_inner> {
                                 builder: ((context, scoreSnapshot) {
                                   if (scoreSnapshot.hasData) {
                                     return Text(
-                                      '총 기부금 : ${scoreSnapshot.data}원',
+                                      '총 기부금 : ${ApiService.money_f.format(scoreSnapshot.data)}원',
                                       style: const TextStyle(
                                         fontSize: 10,
                                         color: Color(0xFF464646),

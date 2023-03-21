@@ -1,3 +1,4 @@
+import 'package:angel_lanking/api_service.dart';
 import 'package:angel_lanking/model/donation2.dart';
 import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Tier_image.dart';
@@ -138,7 +139,7 @@ class Lanking extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '($cost/$end)',
+                            '(${ApiService.money_f.format(cost)}/${ApiService.money_f.format(end)})',
                             style: const TextStyle(
                               fontSize: 10,
                               color: Color(0xFFAEAEAE),
@@ -186,7 +187,7 @@ class Lanking extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                '총 기부금 : $cost원',
+                                '총 기부금 : ${ApiService.money_f.format(cost)}원',
                                 style: const TextStyle(
                                   fontSize: 10,
                                   color: Color(0xFF464646),

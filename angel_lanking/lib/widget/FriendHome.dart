@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 class FriendHome extends StatefulWidget {
   final String user_group;
   final String userID;
+  final int used_money;
   final List donationList;
   const FriendHome({
     super.key,
     required this.userID,
+    required this.used_money,
     required this.user_group,
     required this.donationList,
   });
@@ -37,6 +39,7 @@ class _FriendHomeState extends State<FriendHome> {
               user_group: widget.user_group,
               getDonationdata: Snapshot.data!,
               donationList: widget.donationList,
+              used_money: widget.used_money,
             );
           } else {
             return Container();

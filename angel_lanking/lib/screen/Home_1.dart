@@ -13,6 +13,7 @@ class Home_1 extends StatefulWidget {
   final String user_group;
   final List donationList;
   final int my_group;
+  final int used_money;
   final List<DonationModel2> getDonationdata;
 
   const Home_1({
@@ -20,6 +21,7 @@ class Home_1 extends StatefulWidget {
     required this.userID,
     required this.donationList,
     required this.my_group,
+    required this.used_money,
     required this.getDonationdata,
     required this.user_group,
   });
@@ -38,7 +40,8 @@ class _Home_1State extends State<Home_1> {
   void initState() {
     super.initState();
     usermodel = ApiService.getUserdata(widget.userID);
-    donationpoint = ApiService.getDonationPointdata(widget.getDonationdata);
+    donationpoint = ApiService.getDonationPointdata(
+        widget.getDonationdata, widget.used_money);
     //getDonationdata = ApiService.getDonationdata(widget.donationList);
     groupusers = ApiService.getGroupUser(widget.user_group);
     grouplistmodel = ApiService.getGroupList();
@@ -105,8 +108,7 @@ class _Home_1State extends State<Home_1> {
         const Banners(
           image:
               'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/banner1.png',
-          link:
-              'https://www.unicef.or.kr/?trackcode=g_kad&utm_source=google&utm_medium=cpc&utm_term=%EC%9C%A0%EB%8B%88%EC%84%B8%ED%94%84&utm_campaign=brand&mac_ad_key=2011231204&gclid=CjwKCAiAuOieBhAIEiwAgjCvcpulhoe0KN_F6Ho3eb21KIsVIPw4xyEuyGb-F6_KtP8WmbvQveYFQBoCIyEQAvD_BwE',
+          link: 'https://www.unicef.or.kr/',
         ),
         Column(
           children: [
@@ -254,8 +256,7 @@ class _Home_1State extends State<Home_1> {
         const Banners(
           image:
               'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/banner2.png',
-          link:
-              'https://www.childfund.or.kr/regularSpon/regular.do?utm_medium=cpc&utm_source=google&utm_campaign=g_search_pc&utm_content=&utm_term=%EC%96%B4%EB%A6%B0%EC%9D%B4%EC%9E%AC%EB%8B%A8&gclid=CjwKCAiAuOieBhAIEiwAgjCvchPLjHz30pKGLtNtR2HQclRkLAiC7TT4RYdHmo-fvsH7F4I0-30SqxoCaBYQAvD_BwE',
+          link: 'https://www.childfund.or.kr/regularSpon/regular.do',
         ),
         Column(
           children: [
@@ -328,7 +329,8 @@ class _Home_1State extends State<Home_1> {
                                             index: (groupSnapshot.data!
                                                         .indexOf(group) +
                                                     1)
-                                                .toString()),
+                                                .toString(),
+                                            used_money: group.money),
                                       ],
                                     ),
                               ],
@@ -448,6 +450,7 @@ class _Main_LankingState extends State<Main_Lanking> {
               donationList: userSnapshot.data!.donation,
               index: widget.index.toString(),
               user_name: userSnapshot.data!.name,
+              used_money: userSnapshot.data!.used_money,
             ),
           );
         }
@@ -461,12 +464,14 @@ class Main_Lanking_score extends StatefulWidget {
   final List<dynamic> donationList;
   final String user_name;
   final String index;
-  const Main_Lanking_score({
-    Key? key,
-    required this.donationList,
-    required this.user_name,
-    required this.index,
-  }) : super(key: key);
+  final int used_money;
+  const Main_Lanking_score(
+      {Key? key,
+      required this.donationList,
+      required this.user_name,
+      required this.index,
+      required this.used_money})
+      : super(key: key);
 
   @override
   State<Main_Lanking_score> createState() => _Main_Lanking_scoreState();
@@ -491,6 +496,7 @@ class _Main_Lanking_scoreState extends State<Main_Lanking_score> {
             donationList: snapshot2.data!,
             user_name: widget.user_name,
             index: widget.index,
+            used_money: widget.used_money,
           );
         }
         return Container();
@@ -503,11 +509,13 @@ class Main_Lanking_makeList extends StatefulWidget {
   final List<DonationModel2> donationList;
   final String user_name;
   final String index;
+  final int used_money;
   const Main_Lanking_makeList({
     Key? key,
     required this.donationList,
     required this.user_name,
     required this.index,
+    required this.used_money,
   }) : super(key: key);
 
   @override
@@ -520,7 +528,8 @@ class _Main_Lanking_makeListState extends State<Main_Lanking_makeList> {
   @override
   void initState() {
     super.initState();
-    getDonationdata = ApiService.getDonationPointdata(widget.donationList);
+    getDonationdata =
+        ApiService.getDonationPointdata(widget.donationList, widget.used_money);
   }
 
   @override
@@ -573,7 +582,7 @@ class _Main_Lanking_makeListState extends State<Main_Lanking_makeList> {
                         width: 30,
                       ),
                       Text(
-                        '총 기부금 : ${snapshot.data![0]}원',
+                        '총 기부금 : ${ApiService.money_f.format(snapshot.data![0])}원',
                         style: const TextStyle(
                           fontSize: 10,
                           color: Colors.black,

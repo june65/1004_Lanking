@@ -6,6 +6,7 @@ import 'package:angel_lanking/model/groupuser.dart';
 import 'package:angel_lanking/model/number.dart';
 import 'package:angel_lanking/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class ApiService {
   static Future<UserModel> getUserdata(String Userid) async {
@@ -118,7 +119,7 @@ class ApiService {
   }
 
   static Future<List<dynamic>> getDonationPointdata(
-      List<DonationModel2> DonationPointList) async {
+      List<DonationModel2> DonationPointList, num money) async {
     late int Start = 0;
     late int Final = 0;
     late int Sum = 0;
@@ -131,7 +132,7 @@ class ApiService {
         }
       }
     }
-
+    Sum += money.toInt();
     late String tear = 'unranked';
 
     if (Sum < 30000) {
@@ -166,4 +167,6 @@ class ApiService {
     }
     return [Sum, tear, Start, Final, Persent];
   }
+
+  static var money_f = NumberFormat('###,###,###,###');
 }

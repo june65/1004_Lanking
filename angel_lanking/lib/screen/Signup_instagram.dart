@@ -241,7 +241,9 @@ class _Signup_instagramState extends State<Signup_instagram> {
                                         'name': widget.user_id_save,
                                         'donation': [],
                                         'instagram': instagram_id.text,
-                                        'group': widget.group_save
+                                        'group': widget.group_save,
+                                        'money': 10000,
+                                        'used_money': 0,
                                       });
 
                                       List newgroupuserlist =
