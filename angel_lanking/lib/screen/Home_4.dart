@@ -228,6 +228,7 @@ class _Home_4State extends State<Home_4> {
                                     persent: snapshotpoint.data![4],
                                     getDonationdata: widget.getDonationdata,
                                     my_group: widget.my_group,
+                                    lastlank: snapshot.data!.tier,
                                   );
                                 }
                                 return Lanking(
@@ -243,6 +244,7 @@ class _Home_4State extends State<Home_4> {
                                   persent: 0,
                                   getDonationdata: widget.getDonationdata,
                                   my_group: widget.my_group,
+                                  lastlank: snapshot.data!.tier,
                                 );
                               });
                         }
@@ -259,6 +261,7 @@ class _Home_4State extends State<Home_4> {
                           persent: 0,
                           getDonationdata: widget.getDonationdata,
                           my_group: widget.my_group,
+                          lastlank: '...',
                         );
                       })),
                   FutureBuilder(

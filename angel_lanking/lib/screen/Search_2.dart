@@ -53,6 +53,7 @@ class _Search_2State extends State<Search_2> {
                         image: group.image,
                         donationlist: group.donation,
                         index: donationSnapshot2.data!.indexOf(group) + 1,
+                        money: group.money,
                       ),
                   ],
                 );

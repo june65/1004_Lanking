@@ -7,6 +7,7 @@ class Profile extends StatefulWidget {
   final String name;
   final String image;
   final int index;
+  final int money;
   final List userlist;
   final List donationlist;
   const Profile({
@@ -16,6 +17,7 @@ class Profile extends StatefulWidget {
     required this.image,
     required this.donationlist,
     required this.index,
+    required this.money,
   });
 
   @override
@@ -38,12 +40,14 @@ class _ProfileState extends State<Profile> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Profile_inner(
-              name: widget.name,
-              userlist: widget.userlist,
-              image: widget.image,
-              donationlist: widget.donationlist,
-              getDonationdata: snapshot.data!,
-              index: widget.index);
+            name: widget.name,
+            userlist: widget.userlist,
+            image: widget.image,
+            donationlist: widget.donationlist,
+            getDonationdata: snapshot.data!,
+            index: widget.index,
+            money: widget.money,
+          );
         }
         return Container();
       },

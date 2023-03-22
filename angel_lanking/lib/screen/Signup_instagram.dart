@@ -244,6 +244,7 @@ class _Signup_instagramState extends State<Signup_instagram> {
                                         'group': widget.group_save,
                                         'money': 10000,
                                         'used_money': 0,
+                                        'tier': 'Bronze',
                                       });
 
                                       List newgroupuserlist =

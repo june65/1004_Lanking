@@ -57,14 +57,29 @@ class Friend extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Image.network(
-                    'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                    width: 100,
-                    fit: BoxFit.fitWidth,
-                  ),
-                ),
+                (lank != '...')
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 30, horizontal: 15),
+                        child: Column(
+                          children: [
+                            Image.network(
+                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/%EC%B2%9C%EC%82%AC%EB%9E%AD%ED%82%B9+%EB%A1%9C%EA%B3%A0-003.png',
+                              width: 55,
+                              height: 30,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Image.network(
+                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/$lank.png',
+                              width: 120,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(
+                        width: 150,
+                      ),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10),

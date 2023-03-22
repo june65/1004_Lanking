@@ -7,6 +7,7 @@ class Profile_inner extends StatefulWidget {
   final String name;
   final String image;
   final int index;
+  final int money;
   final List userlist;
   final List donationlist;
   final List<DonationModel2> getDonationdata;
@@ -18,6 +19,7 @@ class Profile_inner extends StatefulWidget {
     required this.donationlist,
     required this.getDonationdata,
     required this.index,
+    required this.money,
   });
 
   @override
@@ -34,7 +36,7 @@ class _Profile_innerState extends State<Profile_inner> {
   @override
   void initState() {
     super.initState();
-    donationpoint = getDonationPointdata(widget.getDonationdata);
+    donationpoint = getDonationPointdata(widget.getDonationdata, widget.money);
     if (widget.userlist.isNotEmpty) {
       usermodel1 = ApiService.getUserdata(widget.userlist[0]);
     }
@@ -47,7 +49,7 @@ class _Profile_innerState extends State<Profile_inner> {
   }
 
   static Future<int> getDonationPointdata(
-      List<DonationModel2> DonationPointList) async {
+      List<DonationModel2> DonationPointList, num money) async {
     late int Start = 0;
     late int Final = 0;
     late int Sum = 0;
@@ -60,6 +62,7 @@ class _Profile_innerState extends State<Profile_inner> {
         }
       }
     }
+    Sum += money.toInt();
     return Sum;
   }
 
@@ -176,11 +179,22 @@ class _Profile_innerState extends State<Profile_inner> {
                                   children: [
                                     Center(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Image.network(
-                                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                                          width: 70,
-                                          fit: BoxFit.fitWidth,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 30, horizontal: 15),
+                                        child: Column(
+                                          children: [
+                                            Image.network(
+                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/%EC%B2%9C%EC%82%AC%EB%9E%AD%ED%82%B9+%EB%A1%9C%EA%B3%A0-003.png',
+                                              width: 55,
+                                              height: 30,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                            Image.network(
+                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/${snapshot1.data!.tier}.png',
+                                              width: 120,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -203,11 +217,22 @@ class _Profile_innerState extends State<Profile_inner> {
                                   children: [
                                     Center(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Image.network(
-                                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                                          width: 70,
-                                          fit: BoxFit.fitWidth,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 30, horizontal: 15),
+                                        child: Column(
+                                          children: [
+                                            Image.network(
+                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/%EC%B2%9C%EC%82%AC%EB%9E%AD%ED%82%B9+%EB%A1%9C%EA%B3%A0-003.png',
+                                              width: 55,
+                                              height: 30,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                            Image.network(
+                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/${snapshot2.data!.tier}.png',
+                                              width: 120,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -236,11 +261,22 @@ class _Profile_innerState extends State<Profile_inner> {
                                   children: [
                                     Center(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Image.network(
-                                          'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                                          width: 70,
-                                          fit: BoxFit.fitWidth,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 30, horizontal: 15),
+                                        child: Column(
+                                          children: [
+                                            Image.network(
+                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/%EC%B2%9C%EC%82%AC%EB%9E%AD%ED%82%B9+%EB%A1%9C%EA%B3%A0-003.png',
+                                              width: 55,
+                                              height: 30,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                            Image.network(
+                                              'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/${snapshot3.data!.tier}.png',
+                                              width: 120,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),

@@ -4,10 +4,11 @@ import 'package:angel_lanking/screen/Home.dart';
 import 'package:angel_lanking/screen/Tier_image.dart';
 import 'package:flutter/material.dart';
 
-class Lanking extends StatelessWidget {
+class Lanking extends StatefulWidget {
   final String name;
   final String group;
   final String lank;
+  final String lastlank;
   final int point;
   final int cost;
   final int start;
@@ -23,6 +24,7 @@ class Lanking extends StatelessWidget {
     required this.name,
     required this.group,
     required this.lank,
+    required this.lastlank,
     required this.point,
     required this.cost,
     required this.start,
@@ -33,6 +35,25 @@ class Lanking extends StatelessWidget {
     required this.my_group,
     required this.getDonationdata,
   });
+
+  @override
+  State<Lanking> createState() => _LankingState();
+}
+
+class _LankingState extends State<Lanking> {
+  @override
+  void initState() {
+    super.initState();
+    /*
+    if (widget.lank != '...') {
+      if (widget.lastlank != widget.lank) {
+        FirebaseFirestore.instance.collection('user').doc(widget.userID).set({
+          'tier': widget.lank,
+        });
+      }
+    }
+    */
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +81,15 @@ class Lanking extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                if (lank != '...') {
+                if (widget.lank != '...') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: ((BuildContext context) => Tier_image(
-                          userID: userID,
-                          tier: lank,
-                          donationList: donationList,
-                          getDonationdata: getDonationdata)),
+                          userID: widget.userID,
+                          tier: widget.lank,
+                          donationList: widget.donationList,
+                          getDonationdata: widget.getDonationdata)),
                       fullscreenDialog: true,
                     ),
                   );
@@ -79,11 +100,28 @@ class Lanking extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: Image.network(
-                      'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/silver.png',
-                      width: 100,
-                      fit: BoxFit.fitWidth,
-                    ),
+                    child: (widget.lank != '...')
+                        ? Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              children: [
+                                Image.network(
+                                  'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/%EC%B2%9C%EC%82%AC%EB%9E%AD%ED%82%B9+%EB%A1%9C%EA%B3%A0-003.png',
+                                  width: 55,
+                                  height: 30,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                                Image.network(
+                                  'https://dogmbti.s3.ap-northeast-2.amazonaws.com/1004_lanking/${widget.lank}.png',
+                                  width: 120,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(
+                            width: 150,
+                          ),
                   ),
                   Flexible(
                     child: Padding(
@@ -93,7 +131,7 @@ class Lanking extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            name,
+                            widget.name,
                             style: const TextStyle(
                               fontSize: 17,
                               color: Colors.black,
@@ -118,7 +156,7 @@ class Lanking extends StatelessWidget {
                                     height: 3,
                                   ),
                                   Text(
-                                    group,
+                                    widget.group,
                                     style: const TextStyle(
                                       fontSize: 13,
                                       color: Color(0xFF464646),
@@ -132,14 +170,14 @@ class Lanking extends StatelessWidget {
                             height: 15,
                           ),
                           Text(
-                            '$lank  $persent%',
+                            '${widget.lank}  ${widget.persent}%',
                             style: const TextStyle(
                               fontSize: 13,
                               color: Color(0xFF464646),
                             ),
                           ),
                           Text(
-                            '(${ApiService.money_f.format(cost)}/${ApiService.money_f.format(end)})',
+                            '(${ApiService.money_f.format(widget.cost)}/${ApiService.money_f.format(widget.end)})',
                             style: const TextStyle(
                               fontSize: 10,
                               color: Color(0xFFAEAEAE),
@@ -156,7 +194,7 @@ class Lanking extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    flex: (cost - start),
+                                    flex: (widget.cost - widget.start),
                                     child: Container(
                                       decoration: const BoxDecoration(
                                         borderRadius: BorderRadius.only(
@@ -175,7 +213,7 @@ class Lanking extends StatelessWidget {
                                     ),
                                   ),
                                   Expanded(
-                                    flex: (end - cost),
+                                    flex: (widget.end - widget.cost),
                                     child: Container(
                                       color: const Color(0xFFC8C8C8),
                                     ),
@@ -187,7 +225,7 @@ class Lanking extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                '총 기부금 : ${ApiService.money_f.format(cost)}원',
+                                '총 기부금 : ${ApiService.money_f.format(widget.cost)}원',
                                 style: const TextStyle(
                                   fontSize: 10,
                                   color: Color(0xFF464646),
@@ -213,10 +251,10 @@ class Lanking extends StatelessWidget {
                     builder: ((BuildContext context) => Home(
                           page: 3,
                           search_group: 1,
-                          userID: userID,
-                          donationList: donationList,
+                          userID: widget.userID,
+                          donationList: widget.donationList,
                           my_group: 2,
-                          user_group: group,
+                          user_group: widget.group,
                         )),
                     fullscreenDialog: true,
                   ),
