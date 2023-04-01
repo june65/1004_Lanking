@@ -1,16 +1,12 @@
 # angel_lanking
 
-A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. go to angel_lanking directory
 
-A few resources to get you started if this is your first Flutter project:
+2. write the code
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+flutter build apk --release --target-platform=android-arm64
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. get apk form angel_lanking\build\app\outputs\apk\release
